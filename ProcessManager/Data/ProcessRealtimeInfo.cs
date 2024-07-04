@@ -4,7 +4,7 @@ using ProcessManager.Data.Enums;
 namespace ProcessManager.Data;
 /// <summary>
 /// 进程实时信息
-/// 包含进程启动状态，CPU占有率，内存占有率等实时信息
+/// 包含进程启动状态，CPU占用率，内存占用率等实时信息
 /// </summary>
 public partial class ProcessRealtimeInfo : ObservableObject
 {
