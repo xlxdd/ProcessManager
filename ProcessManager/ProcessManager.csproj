@@ -10,9 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Consts\" />
-    <Folder Include="Data\Enums\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 
   <ItemGroup>
