@@ -9,10 +9,6 @@ namespace ProcessManager.Data;
 public partial class ProcessRealtimeInfo : ObservableObject
 {
     /// <summary>
-    /// 优先级 同时也视为主键
-    /// </summary>
-    public ushort Priority { get; set; }
-    /// <summary>
     /// CPU占用率
     /// 单位 %
     /// </summary>

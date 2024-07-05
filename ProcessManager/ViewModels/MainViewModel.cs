@@ -20,9 +20,8 @@ public partial class MainViewModel : ViewModelBase
     {
         ///设置功能列表
         Functions = new List<FunctionButton>() {
-            new FunctionButton(){Name="添加"},
-            new FunctionButton(){Name="启动所有进程"},
-            new FunctionButton(){Name="关闭所有进程"},
+            new FunctionButton(){Name="进程管理"},
+            new FunctionButton(){Name="设置"},
             new FunctionButton(){Name="信息"},
             new FunctionButton(){Name="升级"},
         };
