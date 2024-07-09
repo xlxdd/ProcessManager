@@ -1,21 +1,20 @@
 ﻿using ProcessManager.ViewModels.Dialogs;
 using ProcessManager.Views.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ProcessManager.Services_Interfaces;
 
 public class DialogService : IDialogService
 {
-    public R OpenDialog<T,R>(T control)where T:UserControl
+    public Result OpenDialog<View, ViewModel, Result>(string title) where View : UserControl, new() where ViewModel : IDialogResult<Result>, new() where Result:class
     {
         IDialogWindow window = new DialogWindow();
-        window.DataContext = new DialogWindowViewModel<T>();
-        window.ShowDialog();
-        return 
+        var vm = new DialogWindowViewModel<View, ViewModel, Result>(title);
+        window.DataContext = vm;
+        if (window.ShowDialog() == true)
+        {
+            return vm.DialogResult;
+        }
+        else return null;
     }
 }

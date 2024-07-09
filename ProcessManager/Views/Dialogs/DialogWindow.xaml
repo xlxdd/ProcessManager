@@ -5,9 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProcessManager.Views.Dialogs"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         Title="{Binding Title}"
-        Height="200"
-        Width="300">
-    <ContentControl Content="{Binding UserControl}" />
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Margin"
+                    Value="80 20" />
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <ContentControl Content="{Binding UserControl}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Content="确定"
+                    Command="{Binding ConfirmCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+            <Button Grid.Column="1"
+                    Content="取消"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+        </Grid>
+    </StackPanel>
 </Window>

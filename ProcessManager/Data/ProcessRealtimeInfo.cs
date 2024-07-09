@@ -12,14 +12,17 @@ public partial class ProcessRealtimeInfo : ObservableObject
     /// CPU占用率
     /// 单位 %
     /// </summary>
-    public double? CPUUsage { get; set; }
+    [ObservableProperty]
+    private double? cPUUsage;
     /// <summary>
     /// 内存使用量
     /// 单位MB
     /// </summary>
-    public ushort? RAMUsage { get; set; }
+    [ObservableProperty]
+    private ushort? rAMUsage;
     /// <summary>
     /// 进程状态
     /// </summary>
-    public ProcessStatus ProcessStatus { get; set; }
+    [ObservableProperty]
+    private ProcessStatus processStatus;
 }

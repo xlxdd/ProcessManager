@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProcessManager.Data.Enums;
+﻿namespace ProcessManager.Data.Enums;
 /// <summary>
 /// 对话框结果
 /// </summary>

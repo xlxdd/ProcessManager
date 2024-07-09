@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
+using ProcessManager.Services_Interfaces;
 using ProcessManager.ViewModels;
 using ProcessManager.Views;
 using System.Windows;
@@ -27,6 +28,7 @@ namespace ProcessManager
             builder.RegisterType<MainViewModel>().SingleInstance();
             builder.RegisterType<ProcessView>().Named<UserControl>("Process").SingleInstance();
             builder.RegisterType<ProcessViewModel>().SingleInstance();
+            builder.RegisterType<DialogService>().As<IDialogService>().SingleInstance();
             Container = builder.Build();
             #endregion
         }

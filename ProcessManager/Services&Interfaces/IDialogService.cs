@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace ProcessManager.Services_Interfaces;
 
 public interface IDialogService
 {
-    R OpenDialog<T,R>()where T:UserControl ;
+    Result OpenDialog<View, ViewModel, Result>(string title) where View : UserControl, new() where ViewModel : IDialogResult<Result>, new()where Result:class;
 }

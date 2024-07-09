@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace ProcessManager.Data;
 /// <summary>
@@ -9,4 +10,5 @@ namespace ProcessManager.Data;
 public partial class FunctionButton : ObservableObject
 {
     public string? Name { get; set; }
+    public IRelayCommand? Command { get; set; }
 }
