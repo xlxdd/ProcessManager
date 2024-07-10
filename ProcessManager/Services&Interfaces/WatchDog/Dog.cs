@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+﻿using System.Windows.Threading;
 
 namespace ProcessManager.Services_Interfaces.WatchDog;
 /// <summary>
@@ -13,10 +7,21 @@ namespace ProcessManager.Services_Interfaces.WatchDog;
 /// </summary>
 public class Dog
 {
-    private readonly DispatcherTimer timer = new ();
-    public Dog(int interval = 1000)
+    private readonly DispatcherTimer timer;
+    public Dog(Action<Object?, EventArgs> action, int interval = 1000)
     {
-        
+        timer = new();
+        timer.Interval = new TimeSpan(0, 0, 0, 0, interval);
+        timer.Tick += new EventHandler(action);
+        timer.IsEnabled = true;
+    }
+    public void Start()
+    {
+        timer.Start();
+    }
+    public void Stop()
+    {
+        timer.Stop();
     }
 }
 

@@ -22,8 +22,6 @@ public partial class MainViewModel : ViewModelBase
         Functions = new List<FunctionButton>() {
             new FunctionButton(){Name="进程管理"},
             new FunctionButton(){Name="设置"},
-            new FunctionButton(){Name="信息"},
-            new FunctionButton(){Name="升级"},
         };
         ///设置初始页面
         CurrentView = App.Current.Container.ResolveNamed<UserControl>("Process");

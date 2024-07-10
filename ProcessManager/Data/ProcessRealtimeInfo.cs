@@ -13,13 +13,13 @@ public partial class ProcessRealtimeInfo : ObservableObject
     /// 单位 %
     /// </summary>
     [ObservableProperty]
-    private double? cPUUsage;
+    private float? cPUUsage;
     /// <summary>
     /// 内存使用量
     /// 单位MB
     /// </summary>
     [ObservableProperty]
-    private ushort? rAMUsage;
+    private float? rAMUsage;
     /// <summary>
     /// 进程状态
     /// </summary>

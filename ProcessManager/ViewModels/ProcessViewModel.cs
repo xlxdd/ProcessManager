@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Data;
 using ProcessManager.Services_Interfaces;
+using ProcessManager.Services_Interfaces.WatchDog;
 using ProcessManager.ViewModels.Dialogs;
 using ProcessManager.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -21,6 +22,7 @@ public partial class ProcessViewModel : ViewModelBase
     [ObservableProperty]
     IEnumerable<FunctionButton> functions;
     private readonly IDialogService _dialogService;
+    private Dog watchDog;
     public ProcessViewModel(IDialogService dialogService)
     {
         _dialogService = dialogService;
@@ -30,8 +32,19 @@ public partial class ProcessViewModel : ViewModelBase
             new FunctionButton(){Name="关闭所有进程"},
             new FunctionButton(){Name="启动所有进程"},
         };
+        //初始化看门狗
+        watchDog = new Dog(RefreshProcessRealTimeInfo);
         Processes = new ObservableCollection<ProcessInfo>();
-        //TODO:读取json配置add到Processes集合中
+        //TODO:读取json配置add到Processes集合中 
+    }
+    /// <summary>
+    /// 刷新进程实时信息并且更新到UI
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RefreshProcessRealTimeInfo(Object? sender, EventArgs e)
+    {
+
     }
     [RelayCommand]
     public void Add()
@@ -40,7 +53,6 @@ public partial class ProcessViewModel : ViewModelBase
         if (res != null)
         {
             Processes.Add(new ProcessInfo { ProcessStartingOptions = res });
-            Console.WriteLine("Successfully received");
         }
     }
 }

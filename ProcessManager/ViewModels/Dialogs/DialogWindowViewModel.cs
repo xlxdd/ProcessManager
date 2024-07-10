@@ -3,7 +3,7 @@ using ProcessManager.Services_Interfaces;
 using System.Windows.Controls;
 
 namespace ProcessManager.ViewModels.Dialogs;
-public partial class DialogWindowViewModel<View, ViewModel, Result> where View : UserControl, new() where ViewModel : IDialogResult<Result>, new() where Result:class
+public partial class DialogWindowViewModel<View, ViewModel, Result> where View : UserControl, new() where ViewModel : IDialogResult<Result>, new() where Result : class
 {
     /// <summary>
     /// 标题
