@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Microsoft.Extensions.Configuration;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.ViewModels;
 using ProcessManager.Views;
@@ -18,9 +17,6 @@ namespace ProcessManager
         public App()
         {
             #region Configuration
-            var manager = new ConfigurationManager();
-            var configBuilder = (IConfigurationBuilder)manager;
-            var configProvider = (IConfigurationRoot)manager;
             #endregion
             #region IOC
             var builder = new ContainerBuilder();

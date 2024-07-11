@@ -6,23 +6,59 @@ namespace ProcessManager.Utils;
 
 public static class ProcessUtils
 {
-    public static ProcessRealtimeInfo GetProcessRealtimeInfo(int processId)
+    /// <summary>
+    /// 进程监测类
+    /// 一个进程监测类实例只能对应一个进程实例（instance）
+    /// </summary>
+    private class ProcessWatcher
     {
-        var process = Process.GetProcessById(processId); // 获取指定 ID 的进程
-        ProcessRealtimeInfo info;
-        //没有获取到，说明进程寄了
-        if (process == null)
+        private string instanceName;
+        private PerformanceCounter cpuCounter;
+        private PerformanceCounter ramCounter;
+        public ProcessWatcher(string name)
         {
-            info = new ProcessRealtimeInfo() { CPUUsage = null, RAMUsage = null, ProcessStatus = ProcessStatus.Closed };
-            return info;
+            instanceName = name;
+            cpuCounter = new PerformanceCounter("Process", "% Processor Time", instanceName);
+            ramCounter = new PerformanceCounter("Process", "Working Set - Private", instanceName);
         }
-        //获取占用
-        var processName = process.ProcessName;
-        using var cpuCounter = new PerformanceCounter("Process", "% Processor Time", processName);
-        using var ramCounter = new PerformanceCounter("Process", "Working Set", processName);
-        var cpu = cpuCounter.NextValue();
-        var ram = ramCounter.NextValue();
-        info = new ProcessRealtimeInfo() { CPUUsage = cpu, RAMUsage = ram, ProcessStatus = ProcessStatus.Closed };
-        return info;
+        public (float cpu, float ram) Watch()
+        {
+            return (cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024));
+        }
+        public void Dispose()
+        {
+            cpuCounter.Dispose();
+            ramCounter.Dispose();
+        }
+    }
+    /// <summary>
+    /// 单进程进程
+    /// 性能监测器
+    /// </summary>
+    public class GeneralProcessWatcher
+    {
+        private ProcessWatcher watcher;
+        public GeneralProcessWatcher(string name)
+        {
+            watcher = new ProcessWatcher(name);
+        }
+        public ProcessRealtimeInfo Watch()
+        {
+            var res = watcher.Watch();
+            return new ProcessRealtimeInfo() { CPUUsage = res.cpu, RAMUsage = res.ram, ProcessStatus = ProcessStatus.Running };
+        }
+        public void Dispose()
+        {
+            watcher.Dispose();
+        }
+    }
+    /// <summary>
+    /// 多进程进程
+    /// 性能监测器
+    /// </summary>
+    public class MultiProcessWatcher
+    {
+        private List<ProcessWatcher> watchers;
+
     }
 }

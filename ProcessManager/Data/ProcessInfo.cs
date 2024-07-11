@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ProcessManager.Utils;
+using System.Diagnostics;
 
 namespace ProcessManager.Data;
 /// <summary>
@@ -6,10 +8,14 @@ namespace ProcessManager.Data;
 /// </summary>
 public partial class ProcessInfo : ObservableObject
 {
+    public string ProcessName { get; set; }
+    public List<Process> processes { get; set; }
+    public ProcessUtils.GeneralProcessWatcher? watcher { get; set; }
     /// <summary>
     /// 进程信息包含实时信息
     /// </summary>
-    public ProcessRealtimeInfo? ProcessRealtimeInfo { get; set; }
+    [ObservableProperty]
+    private ProcessRealtimeInfo? processRealtimeInfo;
     /// <summary>
     /// 进程信息包含启动配置
     /// </summary>

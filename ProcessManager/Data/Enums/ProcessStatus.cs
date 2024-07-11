@@ -16,9 +16,4 @@ public enum ProcessStatus
     /// </summary>
     [Description("关闭")]
     Closed = 1,
-    /// <summary>
-    /// 阻塞
-    /// </summary>
-    [Description("阻塞")]
-    Blocking = 2,
 }

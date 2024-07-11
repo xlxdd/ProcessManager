@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace Tests;
 
@@ -21,10 +16,33 @@ public static class processUtilTest
         //获取占用
         var processName = process.ProcessName;
         Console.WriteLine($"Name:{processName}");
+        //var processTime = process.
+        var stw = new Stopwatch();
+
+        PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
+        string[] instances = cat.GetInstanceNames();
+        foreach (var instance in instances)
+        {
+            if (instance.Contains("chrome"))
+                Console.WriteLine(instance);
+        }
+
+        stw.Reset();
+        stw.Start();
         using var cpuCounter = new PerformanceCounter("Process", "% Processor Time", processName);
-        using var ramCounter = new PerformanceCounter("Process", "Working Set", processName);
+        stw.Stop();
+        Console.WriteLine(stw.ElapsedMilliseconds.ToString());
+        stw.Reset();
+        stw.Start();
+        using var ramCounter = new PerformanceCounter("Process", "Working Set - Private", processName);
+        stw.Stop();
+        Console.WriteLine(stw.ElapsedMilliseconds.ToString());
+        stw.Reset();
+        stw.Start();
         var cpu = cpuCounter.NextValue();
-        var ram = ramCounter.NextValue()/1048576;
+        var ram = ramCounter.NextValue() / (1024 * 1024);
+        stw.Stop();
+        Console.WriteLine(stw.ElapsedMilliseconds.ToString());
         Console.WriteLine($"CPU:{cpu}");
         Console.WriteLine($"RAM:{ram}");
         return;
