@@ -9,9 +9,17 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ProcessManager.Utils;
-
+/// <summary>
+/// json工具类
+/// </summary>
 public static class JsonUtils
 {
+    /// <summary>
+    /// 从文件读取字符串并反序列化为对象
+    /// </summary>
+    /// <typeparam name="T">目标对象类型</typeparam>
+    /// <param name="filePath">文件路径</param>
+    /// <returns></returns>
     public static T ReadfromJson<T>(string filePath)
     {
         try
@@ -32,13 +40,18 @@ public static class JsonUtils
             throw;
         }
     }
-    public static void WriteToJson(T)
+    /// <summary>
+    /// 将对象序列化并写入文件
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="outputPath">目标文件路径</param>
+    /// <param name="content">对象</param>
+    public static void WriteToJson<T>(string outputPath,T content)
     {
         try
         {
-            string outputPath = @"opt.json";
             // 将User对象序列化为JSON字符串
-            string jsonOutput = JsonSerializer.Serialize(newcfg);
+            string jsonOutput = JsonSerializer.Serialize<T>(content);
 
             // 将JSON字符串写入文件
             using (StreamWriter fileWriter = new StreamWriter(outputPath))

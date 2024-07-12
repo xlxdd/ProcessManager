@@ -3,9 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Data;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.Services_Interfaces.WatchDog;
+using ProcessManager.Utils;
 using ProcessManager.ViewModels.Dialogs;
 using ProcessManager.Views.Dialogs;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using ProcessManager.Data.Enums;
 using System.IO;
 using System.Text.Json;
 
@@ -43,33 +46,18 @@ public partial class ProcessViewModel : ViewModelBase
     private void Init()
     {
         string filePath = @"opt.json";
-        try
+        var opts = JsonUtils.ReadfromJson<IEnumerable<ProcessStartingOptions?>>(filePath);
+        foreach (var opt in opts)
         {
-            // 打开并读取文件内容
-            using (StreamReader fileReader = new StreamReader(filePath))
-            {
-                // 从文件中获取JSON字符串
-                string jsonContent = fileReader.ReadToEnd();
-
-                // 使用JsonConvert.DeserializeObject反序列化JSON字符串为User对象
-                IEnumerable<ProcessStartingOptions?> opts = JsonSerializer.Deserialize<IEnumerable<ProcessStartingOptions?>>(jsonContent)!;
-                foreach (var opt in opts)
-                {
-                    Processes.Add(new ProcessInfo { ProcessStartingOptions = opt });
-                }
-            }
+            Processes.Add(new ProcessInfo { ProcessStartingOptions = opt });
         }
-        catch (FileNotFoundException)
-        {
-            throw;
-        }
-        //TODO:开启进程
+        //TODO:开启进程（好像这一步不开启，在“开启全部”开启）
         //开启后为所有进程创建监测器
+        //这里就有一个问题了，是开启进程后开始监测还是一直监测? 一直监测似乎比较方便
         //假设已经读取了配置，并且创建了进程
         //foreach (var p in Processes)
         //{
         //    //这一步会非常耗时
-        //    //实际上还需要加判断是否开启了cpu和内存占用的重启监测
         //    p.watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName);
         //}
     }
@@ -95,21 +83,85 @@ public partial class ProcessViewModel : ViewModelBase
             Processes.Add(new ProcessInfo { ProcessStartingOptions = res });
         }
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
-        try
-        {
-            string outputPath = @"opt.json";
-            // 将User对象序列化为JSON字符串
-            string jsonOutput = JsonSerializer.Serialize(newcfg);
+        string outputPath = @"opt.json";
+        JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath,newcfg);
+    }
+    /// <summary>
+    /// 开启全部
+    /// </summary>
+    [RelayCommand]
+    public void StartAll()
+    {
 
-            // 将JSON字符串写入文件
-            using (StreamWriter fileWriter = new StreamWriter(outputPath))
-            {
-                fileWriter.Write(jsonOutput);
-            }
-        }
-        catch (Exception)
+    }
+    [RelayCommand]
+    public void StopAll()
+    {
+
+    }
+    /// <summary>
+    /// 开启
+    /// </summary>
+    [RelayCommand]
+    public void Start(ProcessInfo processInfo)
+    {
+        //获取进程数量
+        int processNum = processInfo.ProcessStartingOptions.ProcessCount;
+        for(int i = 0; i < processNum; i++)
         {
-            throw;
+            Process p = new Process();
+            processInfo.processes.Add(p);
+            p.StartInfo.FileName = processInfo.ProcessStartingOptions.Path;
+            p.StartInfo.Arguments = processInfo.ProcessStartingOptions.Parameters;
+            //设置显示方式
+            switch (processInfo.ProcessStartingOptions.ShowingOption)
+            {
+                case ShowingOptions.Hide:
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    break;
+                case ShowingOptions.Show:
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    break;
+                default:
+                    break;
+            }
+            p.Start();
+        }    
+    }
+    [RelayCommand]
+    public void Stop(ProcessInfo processInfo)
+    {
+        foreach(Process p in processInfo.processes)
+        {
+            //这几个关闭方式我也看不出多大区别
+            //Close方法会先尝试模拟用户操作进行关闭，如果不能，则强制关闭
+            //大概是封装了CloseMainWindow和Kill方法
+            p.Close();
         }
+    }
+    [RelayCommand]
+    public void Show()
+    {
+        //这个有点抽象
+    }
+    [RelayCommand]
+    public void Hide()
+    {
+
+    }
+    [RelayCommand]
+    public void Edit()
+    {
+
+    }
+    [RelayCommand]
+    public void Delete()
+    {
+
+    }
+    [RelayCommand]
+    public void ShowInfo()
+    {
+
     }
 }
