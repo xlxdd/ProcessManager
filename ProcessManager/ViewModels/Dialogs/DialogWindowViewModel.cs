@@ -3,7 +3,7 @@ using ProcessManager.Services_Interfaces;
 using System.Windows.Controls;
 
 namespace ProcessManager.ViewModels.Dialogs;
-public partial class DialogWindowViewModel<View, ViewModel, Result> where View : UserControl, new() where ViewModel : IDialogResult<Result>, new() where Result : class
+public partial class DialogWindowViewModel<View, ViewModel, Result> where View : UserControl, new() where ViewModel : DialogBase, IDialogResult<Result>, new() where Result : class
 {
     /// <summary>
     /// 标题
@@ -21,11 +21,12 @@ public partial class DialogWindowViewModel<View, ViewModel, Result> where View :
     /// 返回值
     /// </summary>
     public Result? DialogResult { get; set; }
-    public DialogWindowViewModel(string title)
+    public DialogWindowViewModel(string title, object p)
     {
         Title = title;
         UserControl = new View();
         DataContext = new ViewModel();
+        DataContext.GetParam(p);
         UserControl.DataContext = DataContext;
     }
     [RelayCommand]
@@ -40,10 +41,6 @@ public partial class DialogWindowViewModel<View, ViewModel, Result> where View :
     [RelayCommand]
     public void Cancel(IDialogWindow dialog)
     {
-        DialogResult = DataContext.GetResult();
-        if (dialog != null)
-        {
-            dialog.DialogResult = true;
-        }
+        dialog.DialogResult = true;
     }
 }

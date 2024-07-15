@@ -34,13 +34,23 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="启动" />
-                                    <Button Content="关闭" />
-                                    <Button Content="显示界面" />
-                                    <Button Content="隐藏界面" />
-                                    <Button Content="编辑" />
-                                    <Button Content="删除" />
-                                    <Button Content="查看详情" />
+                                    <Button Content="启动" 
+                                            Command="{Binding StartCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="关闭"
+                                            Command="{Binding CloseCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="显示界面" IsEnabled="False" />
+                                    <Button Content="隐藏界面" IsEnabled="False"/>
+                                    <Button Content="编辑"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="删除"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="查看详情"
+                                            Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

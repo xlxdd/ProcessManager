@@ -7,7 +7,7 @@ namespace ProcessManager.Converters;
 /// <summary>
 /// 枚举类型渲染转换器
 /// 用于在渲染下拉框时能够显示Description注解中的内容
-/// 源于网络https://www.cnblogs.com/seabluescn/p/16579315.html
+/// 源于网络 https://www.cnblogs.com/seabluescn/p/16579315.html
 /// </summary>
 public class EnumDescriptionConverter : IValueConverter
 {
@@ -23,7 +23,7 @@ public class EnumDescriptionConverter : IValueConverter
         return string.Empty;
     }
 
-    private string GetEnumDescription(Enum enumObj)
+    public static string GetEnumDescription(Enum enumObj)
     {
         FieldInfo fieldInfo = enumObj.GetType().GetField(enumObj.ToString());
 

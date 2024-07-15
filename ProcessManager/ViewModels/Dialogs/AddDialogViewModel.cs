@@ -8,7 +8,7 @@ using ProcessManager.Utils;
 
 namespace ProcessManager.ViewModels.Dialogs;
 
-public partial class AddDialogViewModel : ViewModelBase, IDialogResult<ProcessStartingOptions>
+public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStartingOptions>
 {
     [ObservableProperty]
     private ProcessStartingOptions options;

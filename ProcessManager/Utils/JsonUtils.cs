@@ -1,12 +1,5 @@
-﻿using ProcessManager.Data;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace ProcessManager.Utils;
 /// <summary>
@@ -46,7 +39,7 @@ public static class JsonUtils
     /// <typeparam name="T"></typeparam>
     /// <param name="outputPath">目标文件路径</param>
     /// <param name="content">对象</param>
-    public static void WriteToJson<T>(string outputPath,T content)
+    public static void WriteToJson<T>(string outputPath, T content)
     {
         try
         {
@@ -63,5 +56,5 @@ public static class JsonUtils
         {
             throw;
         }
-    } 
+    }
 }

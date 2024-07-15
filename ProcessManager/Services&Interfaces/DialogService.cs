@@ -6,10 +6,10 @@ namespace ProcessManager.Services_Interfaces;
 
 public class DialogService : IDialogService
 {
-    public Result OpenDialog<View, ViewModel, Result>(string title) where View : UserControl, new() where ViewModel : IDialogResult<Result>, new() where Result : class
+    public Result OpenDialog<View, ViewModel, Result>(string title, object p) where View : UserControl, new() where ViewModel : DialogBase, IDialogResult<Result>, new() where Result : class
     {
         IDialogWindow window = new DialogWindow();
-        var vm = new DialogWindowViewModel<View, ViewModel, Result>(title);
+        var vm = new DialogWindowViewModel<View, ViewModel, Result>(title, p);
         window.DataContext = vm;
         if (window.ShowDialog() == true)
         {
