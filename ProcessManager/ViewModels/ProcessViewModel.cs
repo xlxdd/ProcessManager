@@ -166,10 +166,11 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Edit(ProcessInfo processInfo)
     {
-        var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("添加进程", processInfo);
+        var res = _dialogService.OpenDialog<EditDialogView, EditDialogViewModel, ProcessStartingOptions>("修改信息", processInfo);
         if (res != null)
         {
-            Processes.Add(new ProcessInfo { ProcessStartingOptions = res });
+            //传的都是引用，直接改
+            processInfo.ProcessStartingOptions = res;
         }
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
         string outputPath = @"opt.json";

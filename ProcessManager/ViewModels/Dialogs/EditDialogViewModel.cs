@@ -5,10 +5,15 @@ using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ProcessManager.ViewModels.Dialogs;
 
-public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStartingOptions>
+public partial class EditDialogViewModel:DialogBase, IDialogResult<ProcessStartingOptions>
 {
     [ObservableProperty]
     private ProcessStartingOptions? options;
@@ -18,13 +23,20 @@ public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStart
     private List<ShowingOptions> showingOptions;
     [ObservableProperty]
     private List<ClosingOptions> closingOptions;
-
-    public AddDialogViewModel()
+    public EditDialogViewModel()
     {
         Options = new();
         StartingOptions = EnumUtils.EnumToList<StartingOptions>();
         ShowingOptions = EnumUtils.EnumToList<ShowingOptions>();
         ClosingOptions = EnumUtils.EnumToList<ClosingOptions>();
+    }
+    public override void GetParam(object? p)
+    {
+        var param = p as ProcessInfo;
+        if(null!= param)
+        {
+            Options = param.ProcessStartingOptions;
+        }
     }
     [RelayCommand]
     public void GetPath()
