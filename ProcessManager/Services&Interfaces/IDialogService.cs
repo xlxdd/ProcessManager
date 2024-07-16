@@ -10,5 +10,5 @@ namespace ProcessManager.Services_Interfaces;
 /// </summary>
 public interface IDialogService
 {
-    Result OpenDialog<View, ViewModel, Result>(string title, object param) where View : UserControl, new() where ViewModel : DialogBase, IDialogResult<Result>, new() where Result : class;
+    Result OpenDialog<View, ViewModel, Result>(string title, object param) where View : UserControl, new() where ViewModel : DialogBase, IDialogResult<Result>, new() where Result : class?;
 }

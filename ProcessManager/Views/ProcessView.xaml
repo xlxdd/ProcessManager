@@ -46,7 +46,7 @@
                                             Command="{Binding EditCommand}"
                                             CommandParameter="{Binding}" />
                                     <Button Content="删除"
-                                            Command="{Binding DeleteCommand}"
+                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                     <Button Content="查看详情"
                                             Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
