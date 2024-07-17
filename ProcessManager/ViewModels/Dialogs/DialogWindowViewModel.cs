@@ -33,6 +33,8 @@ public partial class DialogWindowViewModel<View, ViewModel, Result> where View :
     public void Confirm(IDialogWindow dialog)
     {
         DialogResult = DataContext.GetResult();
+        //如果校验失败，应该返回null，点击确认按钮无效
+        if (null == DialogResult) return;
         if (dialog != null)
         {
             dialog.DialogResult = true;

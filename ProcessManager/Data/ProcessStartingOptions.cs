@@ -1,16 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ProcessManager.Data.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProcessManager.Data;
 /// <summary>
 /// 进程启动信息，将会持久化保存在配置文件中（我的理解）
 /// </summary>
-public partial class ProcessStartingOptions : ObservableObject
+public partial class ProcessStartingOptions : ObservableValidator
 {
     /// <summary>
     /// 编号，在我的理解里是优先级？
     /// </summary>
     [ObservableProperty]
+    [Required]
     private ushort priority;
     /// <summary>
     /// 名称
@@ -21,6 +23,7 @@ public partial class ProcessStartingOptions : ObservableObject
     /// 启动路径
     /// </summary>
     [ObservableProperty]
+    [Required]
     private string? path;
     /// <summary>
     /// 是否启用启动参数
@@ -39,14 +42,14 @@ public partial class ProcessStartingOptions : ObservableObject
     /// 单位ms
     /// </summary>
     [ObservableProperty]
-    public ushort? delayTime;
+    public ushort? delayTime = 0;
     /// <summary>
     /// 超时时间
     /// 超过该时间程序没有启动，视为超时
     /// 弹出“无法获取句柄”窗口 我换个提示吧，这个太爆了
     /// </summary>
     [ObservableProperty]
-    private ushort? overtimeTime;
+    private ushort? overtimeTime = 100;
     /// <summary>
     /// 是否启用最大CPU占用重启
     /// </summary>
@@ -70,15 +73,15 @@ public partial class ProcessStartingOptions : ObservableObject
     [ObservableProperty]
     private UInt32? maxRAMUsage;
     /// <summary>
-    /// 窗口数 什么是窗口数？令人感到费解
+    /// 窗口数
     /// </summary>
     [ObservableProperty]
-    private ushort windowCount;
+    private ushort windowCount = 1;
     /// <summary>
-    /// 进程数 什么是进程数？同样令人感到费解
+    /// 进程数 默认为1
     /// </summary>
     [ObservableProperty]
-    private ushort processCount;
+    private ushort processCount = 1;
     /// <summary>
     /// 启动设置
     /// </summary>

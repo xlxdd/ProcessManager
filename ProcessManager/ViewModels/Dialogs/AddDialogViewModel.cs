@@ -38,6 +38,11 @@ public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStart
     }
     public ProcessStartingOptions GetResult()
     {
+        ValidateAllProperties();
+        if (HasErrors)
+        {
+            return null;
+        }
         return Options!;
     }
 }

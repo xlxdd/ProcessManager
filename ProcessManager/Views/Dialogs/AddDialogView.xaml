@@ -48,7 +48,18 @@
                 Margin="10 10">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="编号：" />
-            <TextBox Text="{Binding Options.Priority}" />
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.Priority"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:NumberValidator
+                                ValidatesOnTargetUpdated="True"
+                                xmlns:v="clr-namespace:ProcessManager.Data.Validations" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="中文名：" />
