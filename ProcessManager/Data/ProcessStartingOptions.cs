@@ -1,18 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ProcessManager.Data.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace ProcessManager.Data;
 /// <summary>
 /// 进程启动信息，将会持久化保存在配置文件中（我的理解）
 /// </summary>
-public partial class ProcessStartingOptions : ObservableValidator
+public partial class ProcessStartingOptions : ObservableObject
 {
     /// <summary>
     /// 编号，在我的理解里是优先级？
     /// </summary>
     [ObservableProperty]
-    [Required]
     private ushort priority;
     /// <summary>
     /// 名称
@@ -23,7 +21,6 @@ public partial class ProcessStartingOptions : ObservableValidator
     /// 启动路径
     /// </summary>
     [ObservableProperty]
-    [Required]
     private string? path;
     /// <summary>
     /// 是否启用启动参数
@@ -46,7 +43,7 @@ public partial class ProcessStartingOptions : ObservableValidator
     /// <summary>
     /// 超时时间
     /// 超过该时间程序没有启动，视为超时
-    /// 弹出“无法获取句柄”窗口 我换个提示吧，这个太爆了
+    /// 弹出“无法获取句柄”窗口 换个提示吧 又说程序要防止船员误操作，又给这样的提示，船员能看懂什么是句柄吗
     /// </summary>
     [ObservableProperty]
     private ushort? overtimeTime = 100;

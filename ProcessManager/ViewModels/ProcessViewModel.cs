@@ -179,11 +179,11 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Delete(ProcessInfo processInfo)
     {
-        var res = _dialogService.OpenDialog<DeleteConfirmDialogView, DeleteConfiremDialogViewModel,DialogResult?>("警告", "确认删除？");
+        var res = _dialogService.OpenDialog<DeleteConfirmDialogView, DeleteConfiremDialogViewModel, DialogResult?>("警告", "确认删除？");
         //取消
-        if(null == res)return;
+        if (null == res) return;
         //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我们管吗？）2移除监视器 3删除processInfo 4修改json
-        if(null!=processInfo.watcher)processInfo.watcher.Dispose();
+        if (null != processInfo.watcher) processInfo.watcher.Dispose();
         if (null != processInfo.processes) { foreach (var p in processInfo.processes) p.Kill(); }
         Processes.Remove(processInfo);
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);

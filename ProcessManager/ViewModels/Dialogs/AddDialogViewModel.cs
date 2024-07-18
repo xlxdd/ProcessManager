@@ -5,6 +5,7 @@ using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.Utils;
+using System.Windows.Controls;
 
 namespace ProcessManager.ViewModels.Dialogs;
 
@@ -38,11 +39,8 @@ public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStart
     }
     public ProcessStartingOptions GetResult()
     {
-        ValidateAllProperties();
-        if (HasErrors)
-        {
-            return null;
-        }
+        //ErrorList留着备用，虽然目前是只要知道有没有错误就行了
+        if (ErrorList.Count != 0) return null;
         return Options!;
     }
 }

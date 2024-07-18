@@ -6,9 +6,14 @@
              xmlns:local="clr-namespace:ProcessManager.Views.Dialogs"
              xmlns:vm="clr-namespace:ProcessManager.ViewModels.Dialogs"
              xmlns:cvt="clr-namespace:ProcessManager.Converters"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:v ="clr-namespace:ProcessManager.Data.Validations"
              mc:Ignorable="d"
              Height="Auto"
              Width="520">
+    <i:Interaction.Behaviors>
+        <v:ValidationExceptionBehavior/>
+    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <cvt:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
         <DataTemplate x:Key="EnumTemplate">
@@ -24,6 +29,22 @@
                     Value="100" />
             <Setter Property="Margin"
                     Value="0 0 70 0" />
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <AdornedElementPlaceholder Name="customAdorner"></AdornedElementPlaceholder>
+                            <TextBlock Text="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                                       Foreground="Red"
+                                       Background="LightGray"
+                                       Visibility="{Binding ElementName=customAdorner, Path=AdornedElement.IsEnabled,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       FontSize="9">
+                            </TextBlock>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style TargetType="ComboBox"
                BasedOn="{StaticResource MaterialDesignComboBox}">
@@ -51,11 +72,11 @@
             <TextBox>
                 <TextBox.Text>
                     <Binding Path="Options.Priority"
+                             NotifyOnValidationError="True"
                              UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <v:NumberValidator
-                                ValidatesOnTargetUpdated="True"
-                                xmlns:v="clr-namespace:ProcessManager.Data.Validations" />
+                                ValidatesOnTargetUpdated="True" />
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
@@ -63,14 +84,34 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="中文名：" />
-            <TextBox Text="{Binding Options.Name.Chinese}" />
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.Name.Chinese"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:NameValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <TextBlock Text="英文名：" />
             <TextBox Text="{Binding Options.Name.English}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="启动路径：" />
-            <TextBox Width="350" Margin="0"
-                     Text="{Binding Options.Path}"/>
+            <TextBox Width="350"
+                     Margin="0">
+                <TextBox.Text>
+                    <Binding Path="Options.Path"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:PathValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <Button Content="浏览" Margin="0" Command="{Binding GetPathCommand}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
@@ -84,31 +125,89 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="延迟时间：" />
-            <TextBox Text="{Binding Options.DelayTime}"/>
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.DelayTime"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:DelayTimeValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <TextBlock Text="超时时间：" />
-            <TextBox Text="{Binding Options.OvertimeTime}"/>
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.OvertimeTime"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:OverTimeTimeValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="CPU占用重启："/>
             <TextBox Margin="0"
-                     IsEnabled="{Binding Path=IsChecked, ElementName=EnableCPU}"
-                     Text="{Binding Options.MaxCPUUsage}"/>
+                     IsEnabled="{Binding Path=IsChecked, ElementName=EnableCPU}">
+                <TextBox.Text>
+                    <Binding Path="Options.MaxCPUUsage"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:CPUUsageValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <CheckBox x:Name="EnableCPU"
                       Content="启用"
                       IsChecked="{Binding Options.EnableMaxCPUUsage}"/>
             <TextBlock Text="内存占用重启：" />
             <TextBox Margin="0"
-                     IsEnabled="{Binding Path=IsChecked, ElementName=EnableRAM}"
-                     Text="{Binding Options.MaxRAMUsage}"/>
+                     IsEnabled="{Binding Path=IsChecked, ElementName=EnableRAM}">
+                <TextBox.Text>
+                    <Binding Path="Options.MaxRAMUsage"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:RAMUsageValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <CheckBox x:Name="EnableRAM"
                       Content="启用"
                       IsChecked="{Binding Options.EnableMaxRAMUsage}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="窗口数：" />
-            <TextBox Text="{Binding Options.WindowCount}" />
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.WindowCount"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:WindowCountValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <TextBlock Text="进程数：" />
-            <TextBox Text="{Binding Options.ProcessCount}"/>
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.ProcessCount"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:ProcessCountValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="显示方式：" />

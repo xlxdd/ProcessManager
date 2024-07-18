@@ -2,6 +2,7 @@
 
 namespace ProcessManager.ViewModels;
 
-public abstract class ViewModelBase : ObservableValidator
+public abstract class ViewModelBase : ObservableObject
 {
+    public List<string> ErrorList { get; set; } = new List<string>();
 }

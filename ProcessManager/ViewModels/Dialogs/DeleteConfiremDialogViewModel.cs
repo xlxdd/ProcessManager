@@ -2,12 +2,6 @@
 using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Services_Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Animation;
 
 namespace ProcessManager.ViewModels.Dialogs;
 
@@ -17,7 +11,7 @@ public partial class DeleteConfiremDialogViewModel : DialogBase, IDialogResult<D
     private string? content;
     public DeleteConfiremDialogViewModel()
     {
-        
+
     }
     public override void GetParam(object? p)
     {
@@ -25,6 +19,6 @@ public partial class DeleteConfiremDialogViewModel : DialogBase, IDialogResult<D
     }
     public DialogResult? GetResult()
     {
-        return new DialogResult() { Result = DialogResults.Yes};
+        return new DialogResult() { Result = DialogResults.Yes };
     }
 }
