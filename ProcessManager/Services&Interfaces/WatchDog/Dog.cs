@@ -15,6 +15,10 @@ public class Dog
         timer.Tick += new EventHandler(action);
         timer.IsEnabled = true;
     }
+    public void AddAction(Action<Object?, EventArgs> action)
+    {
+        timer.Tick += new EventHandler(action);
+    }
     public void Start()
     {
         timer.Start();

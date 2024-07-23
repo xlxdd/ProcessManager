@@ -2,7 +2,9 @@
 using System.Diagnostics;
 
 namespace Tests;
-
+//PerformanceCounter性能监察器必须要传入实例名称 这个太难受了
+//对于子进程的多进程程序 和 多实例的多进程
+//策略应该是不一样的 这样就非常复杂
 public static class GetNames
 {
     public static void GetCategoryNameList()
@@ -11,7 +13,7 @@ public static class GetNames
         myCat2 = PerformanceCounterCategory.GetCategories();
         for (int i = 0; i < myCat2.Length; i++)
         {
-            Console.WriteLine(myCat2[i].CategoryName.ToString());
+            //Console.WriteLine(myCat2[i].CategoryName.ToString());
         }
     }
     public static void GetInstanceNameListANDCounterNameList(string CategoryName)
@@ -35,13 +37,16 @@ public static class GetNames
             }
             for (int i = 0; i < instanceNames.Length; i++)
             {
-                Console.WriteLine(instanceNames[i]);
+                if (instanceNames[i].Contains("Clash"))
+                {
+                    Console.WriteLine(instanceNames[i]);
+                }
             }
             Console.WriteLine(" ****************************** ");
-            foreach (PerformanceCounter counter in counters)
-            {
-                Console.WriteLine(counter.CounterName);
-            }
+            //foreach (PerformanceCounter counter in counters)
+            //{
+            //    Console.WriteLine(counter.CounterName);
+            //}
         }
         catch (Exception)
         {

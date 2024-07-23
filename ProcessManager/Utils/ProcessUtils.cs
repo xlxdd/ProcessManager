@@ -32,33 +32,44 @@ public static class ProcessUtils
         }
     }
     /// <summary>
-    /// 单进程进程
     /// 性能监测器
     /// </summary>
     public class GeneralProcessWatcher
     {
-        private ProcessWatcher watcher;
-        public GeneralProcessWatcher(string name)
+        private List<ProcessWatcher> watcher = new();
+        public GeneralProcessWatcher(string name, int count)
         {
-            watcher = new ProcessWatcher(name);
+            for (int i = 0; i < count; i++)
+            {
+                ProcessWatcher wch;
+                if (i == 0)
+                {
+                    wch = new ProcessWatcher(name);
+                }
+                else
+                {
+                    wch = new ProcessWatcher($"{name}#{i}");
+                }
+                watcher.Add(wch);
+            }
         }
         public ProcessRealtimeInfo Watch()
         {
-            var res = watcher.Watch();
-            return new ProcessRealtimeInfo() { CPUUsage = res.cpu, RAMUsage = res.ram, ProcessStatus = ProcessStatus.Running };
+            var info = new ProcessRealtimeInfo() { CPUUsage = 0, RAMUsage = 0, ProcessStatus = ProcessStatus.Running };
+            foreach (ProcessWatcher watcher in watcher)
+            {
+                var res = watcher.Watch();
+                info.CPUUsage += res.cpu;
+                info.RAMUsage += res.ram;
+            }
+            return info;
         }
         public void Dispose()
         {
-            watcher.Dispose();
+            foreach (ProcessWatcher watcher in watcher)
+            {
+                watcher.Dispose();
+            }
         }
-    }
-    /// <summary>
-    /// 多进程进程
-    /// 性能监测器
-    /// </summary>
-    public class MultiProcessWatcher
-    {
-        private List<ProcessWatcher> watchers;
-
     }
 }

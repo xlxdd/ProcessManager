@@ -37,9 +37,10 @@ public partial class ProcessViewModel : ViewModelBase
         };
         //初始化看门狗
         watchDog = new Dog(RefreshProcessRealTimeInfo);
+        watchDog.AddAction(RestartProcess);
         Processes = new ObservableCollection<ProcessInfo>();
-        watchDog.Start();
         Init();
+        watchDog.Start();
     }
     private void Init()
     {
@@ -47,16 +48,19 @@ public partial class ProcessViewModel : ViewModelBase
         var opts = JsonUtils.ReadfromJson<IEnumerable<ProcessStartingOptions?>>(filePath);
         foreach (var opt in opts)
         {
-            Processes.Add(new ProcessInfo { ProcessStartingOptions = opt });
+            Processes.Add(new ProcessInfo { ProcessName = StringUtils.FullNameToProcessName(opt.Path), ProcessStartingOptions = opt });
         }
-        //为所有配置中的进程创建监测器
-        //这里创建不了监视器，因为还不知道实例名称（但理论上应该能知道）
-        //foreach (var p in Processes)
-        //{
-        //    //这一步会非常耗时
-        //    p.watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName);
-        //}
+        Task.Run(() =>
+        {
+            foreach (var p in Processes)
+            {
+                //这一步会非常耗时
+                //添加性能监视
+                p.watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName, p.ProcessStartingOptions.ProcessCount);
+            }
+        });
     }
+
     /// <summary>
     /// 刷新进程实时信息并且更新到UI
     /// </summary>
@@ -68,6 +72,33 @@ public partial class ProcessViewModel : ViewModelBase
         {
             if (null != p.watcher)
                 p.ProcessRealtimeInfo = p.watcher.Watch();
+        }
+    }
+    /// <summary>
+    /// 重启超过占用的进程
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RestartProcess(Object? sender, EventArgs e)
+    {
+        foreach (var p in Processes)
+        {
+            if (true == p.ProcessStartingOptions!.EnableMaxCPUUsage)
+            {
+                if (p.ProcessRealtimeInfo!.CPUUsage > p.ProcessStartingOptions.MaxCPUUsage)
+                {
+                    Stop(p);
+                    Start(p);
+                }
+            }
+            if (true == p.ProcessStartingOptions!.EnableMaxRAMUsage)
+            {
+                if (p.ProcessRealtimeInfo!.RAMUsage > p.ProcessStartingOptions.MaxRAMUsage)
+                {
+                    Stop(p);
+                    Start(p);
+                }
+            }
         }
     }
     [RelayCommand]
