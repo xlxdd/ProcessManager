@@ -35,14 +35,15 @@ public partial class ProcessViewModel : ViewModelBase
             new FunctionButton(){Name="关闭所有进程"},
             new FunctionButton(){Name="启动所有进程"},
         };
+        Processes = new ObservableCollection<ProcessInfo>();
+        //读配置
+        Init();
         //初始化看门狗
         watchDog = new Dog(RefreshProcessRealTimeInfo);
-        watchDog.AddAction(RestartProcess);
-        Processes = new ObservableCollection<ProcessInfo>();
-        Init();
+        watchDog.AddAction(RestartProcess); 
         watchDog.Start();
     }
-    private void Init()
+    private async void Init()
     {
         string filePath = @"opt.json";
         var opts = JsonUtils.ReadfromJson<IEnumerable<ProcessStartingOptions?>>(filePath);
@@ -50,7 +51,7 @@ public partial class ProcessViewModel : ViewModelBase
         {
             Processes.Add(new ProcessInfo { ProcessName = StringUtils.FullNameToProcessName(opt.Path), ProcessStartingOptions = opt });
         }
-        Task.Run(() =>
+        await Task.Run(() =>
         {
             foreach (var p in Processes)
             {
@@ -70,7 +71,7 @@ public partial class ProcessViewModel : ViewModelBase
     {
         foreach (var p in Processes)
         {
-            if (null != p.watcher)
+            if (null != p && null != p.watcher)
                 p.ProcessRealtimeInfo = p.watcher.Watch();
         }
     }
@@ -147,7 +148,7 @@ public partial class ProcessViewModel : ViewModelBase
         int processNum = processInfo.ProcessStartingOptions.ProcessCount;
         for (int i = 0; i < processNum; i++)
         {
-            Process p = new Process();
+            Process p = new();
             processInfo.processes.Add(p);
             p.StartInfo.FileName = processInfo.ProcessStartingOptions.Path;
             p.StartInfo.Arguments = processInfo.ProcessStartingOptions.Parameters;
@@ -175,22 +176,23 @@ public partial class ProcessViewModel : ViewModelBase
     {
         foreach (Process p in processInfo.processes)
         {
-            //这几个关闭方式我也看不出多大区别
-            //Close方法会先尝试模拟用户操作进行关闭，如果不能，则强制关闭
-            //大概是封装了CloseMainWindow和Kill方法
-            p.Close();
+            //使用kill,只有Kill能关闭没有图形界面的进程
+            p.Kill(true);
         }
     }
     /// <summary>
     /// Show和Hide实际上要进行重启，这个有点危险
     /// </summary>
     [RelayCommand]
-    public void Show()
+    public void Show(ProcessInfo processInfo)
     {
-        //这个有点抽象
+        foreach (Process p in processInfo.processes)
+        {
+            p.StartInfo.CreateNoWindow = false;
+        }
     }
     [RelayCommand]
-    public void Hide()
+    public void Hide(ProcessInfo processInfo)
     {
 
     }
@@ -213,7 +215,7 @@ public partial class ProcessViewModel : ViewModelBase
         var res = _dialogService.OpenDialog<DeleteConfirmDialogView, DeleteConfiremDialogViewModel, DialogResult?>("警告", "确认删除？");
         //取消
         if (null == res) return;
-        //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我们管吗？）2移除监视器 3删除processInfo 4修改json
+        //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我管吗？）2移除监视器 3删除processInfo 4修改json
         if (null != processInfo.watcher) processInfo.watcher.Dispose();
         if (null != processInfo.processes) { foreach (var p in processInfo.processes) p.Kill(); }
         Processes.Remove(processInfo);

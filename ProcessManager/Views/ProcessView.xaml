@@ -38,10 +38,14 @@
                                             Command="{Binding DataContext.StartCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                     <Button Content="关闭"
-                                            Command="{Binding DataContext.CloseCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                            Command="{Binding DataContext.StopCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="显示界面" IsEnabled="False" />
-                                    <Button Content="隐藏界面" IsEnabled="False"/>
+                                    <Button Content="显示界面"
+                                            Command="{Binding DataContext.ShowCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="隐藏界面"
+                                            Command="{Binding DataContext.HideCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
                                     <Button Content="编辑"
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />

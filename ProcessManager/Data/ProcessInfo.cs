@@ -9,7 +9,7 @@ namespace ProcessManager.Data;
 public partial class ProcessInfo : ObservableObject
 {
     public string ProcessName { get; set; }
-    public List<Process> processes { get; set; }
+    public List<Process> processes { get; set; } = new();
     public ProcessUtils.GeneralProcessWatcher? watcher { get; set; }
     /// <summary>
     /// 进程信息包含实时信息

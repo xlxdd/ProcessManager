@@ -10,7 +10,7 @@ public static class StringUtils
     public static string FullNameToProcessName(string fullName)
     {
         string fileName = fullName.Substring(fullName.LastIndexOf("\\") + 1); // 文件名
-        string processName = fileName.Substring(0, fileName.LastIndexOf(".") + 1);
+        string processName = fileName.Substring(0, fileName.LastIndexOf("."));
         return processName;
     }
 }
