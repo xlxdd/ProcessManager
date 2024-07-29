@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:ProcessManager"
         xmlns:cvt ="clr-namespace:ProcessManager.Converters"
         xmlns:r="clr-namespace:ProcessManager.Resources"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
         Title="{Binding [window_title],Source={x:Static r:LanguageManager.Instance}}" Height="450" Width="800">
     <Window.Resources>
@@ -17,6 +18,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <tb:TaskbarIcon ToolTipText="Manager"
+                        IconSource="../进程管理.ico">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu Background="LightBlue">
+                    <MenuItem Header="Show" Command="{Binding ShowCommand}"/>
+                    <MenuItem Header="Exit" Command="{Binding ExitCommand}" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
         <ContentControl Grid.Row="0"
                         Content="{Binding CurrentView}" />
         <ItemsControl Grid.Row="1"

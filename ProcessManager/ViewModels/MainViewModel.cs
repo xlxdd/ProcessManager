@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Data;
 using ProcessManager.Resources;
+using System.Windows.Controls;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace ProcessManager.ViewModels;
@@ -39,5 +40,15 @@ public partial class MainViewModel : ViewModelBase
     public void Navigate(string viewName)
     {
         CurrentView = App.Current.Container.ResolveNamed<UserControl>(viewName);
+    }
+    [RelayCommand]
+    public void Show()
+    {
+        App.Current.MainWindow.Show();
+    }
+    [RelayCommand]
+    public void Exit()
+    {
+        App.Current.Shutdown();
     }
 }

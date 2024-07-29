@@ -1,4 +1,5 @@
 ﻿using ProcessManager.ViewModels;
+using System.ComponentModel;
 using System.Windows;
 
 namespace ProcessManager
@@ -12,6 +13,11 @@ namespace ProcessManager
         {
             DataContext = vm;
             InitializeComponent();
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }
