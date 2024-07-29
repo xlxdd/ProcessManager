@@ -3,7 +3,8 @@ using ProcessManager.Services_Interfaces;
 using ProcessManager.ViewModels;
 using ProcessManager.Views;
 using System.Windows;
-using System.Windows.Controls;
+using Application = System.Windows.Application;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ProcessManager
 {
@@ -24,6 +25,8 @@ namespace ProcessManager
             builder.RegisterType<MainViewModel>().SingleInstance();
             builder.RegisterType<ProcessView>().Named<UserControl>("Process").SingleInstance();
             builder.RegisterType<ProcessViewModel>().SingleInstance();
+            builder.RegisterType<SettingsView>().Named<UserControl>("Settings").SingleInstance();
+            builder.RegisterType<SettingsViewModel>().SingleInstance();
             builder.RegisterType<DialogService>().As<IDialogService>().SingleInstance();
             Container = builder.Build();
             #endregion

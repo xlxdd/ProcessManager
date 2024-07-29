@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Services_Interfaces;
-using System.Windows.Controls;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ProcessManager.ViewModels.Dialogs;
 public partial class DialogWindowViewModel<View, ViewModel, Result> where View : UserControl, new() where ViewModel : DialogBase, IDialogResult<Result>, new() where Result : class?

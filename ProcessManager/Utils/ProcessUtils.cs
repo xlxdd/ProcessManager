@@ -21,11 +21,11 @@ public static class ProcessUtils
             cpuCounter = new PerformanceCounter("Process", "% Processor Time", instanceName);
             ramCounter = new PerformanceCounter("Process", "Working Set - Private", instanceName);
         }
-        public (float cpu, float ram,bool running) Watch()
+        public (float cpu, float ram, bool running) Watch()
         {
             try
             {
-                return (cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024),true);
+                return (cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024), true);
             }
             catch
             {
@@ -68,7 +68,7 @@ public static class ProcessUtils
                 var res = watcher.Watch();
                 info.CPUUsage += res.cpu;
                 info.RAMUsage += res.ram;
-                if(res.running == false)info.ProcessStatus = ProcessStatus.Closed;
+                if (res.running == false) info.ProcessStatus = ProcessStatus.Closed;
             }
             return info;
         }

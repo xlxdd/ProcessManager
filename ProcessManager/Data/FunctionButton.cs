@@ -9,6 +9,12 @@ namespace ProcessManager.Data;
 /// </summary>
 public partial class FunctionButton : ObservableObject
 {
-    public string? Name { get; set; }
+    [ObservableProperty]
+    private string? name;
     public IRelayCommand? Command { get; set; }
+    public string? ViewName { get; set; }
+    public void ChangeCulture()
+    {
+        OnPropertyChanged(nameof(Name));
+    }
 }

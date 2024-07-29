@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Services_Interfaces;
+using DialogResult = ProcessManager.Data.DialogResult;
 
 namespace ProcessManager.ViewModels.Dialogs;
 

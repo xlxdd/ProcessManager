@@ -9,6 +9,7 @@ using ProcessManager.ViewModels.Dialogs;
 using ProcessManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using DialogResult = ProcessManager.Data.DialogResult;
 
 namespace ProcessManager.ViewModels;
 
@@ -40,7 +41,7 @@ public partial class ProcessViewModel : ViewModelBase
         Init();
         //初始化看门狗
         watchDog = new Dog(RefreshProcessRealTimeInfo);
-        watchDog.AddAction(RestartProcess); 
+        watchDog.AddAction(RestartProcess);
         watchDog.Start();
     }
     private async void Init()
@@ -181,7 +182,7 @@ public partial class ProcessViewModel : ViewModelBase
         }
     }
     /// <summary>
-    /// Show和Hide实际上要进行重启，这个有点危险
+    /// Show和Hide实际上要进行重启 不重启怎么做到显示界面，我再查查
     /// </summary>
     [RelayCommand]
     public void Show(ProcessInfo processInfo)

@@ -5,8 +5,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProcessManager"
+        xmlns:cvt ="clr-namespace:ProcessManager.Converters"
+        xmlns:r="clr-namespace:ProcessManager.Resources"
         mc:Ignorable="d"
-        Title="ProcessManager" Height="450" Width="800">
+        Title="{Binding [window_title],Source={x:Static r:LanguageManager.Instance}}" Height="450" Width="800">
+    <Window.Resources>
+        <cvt:IndexNameConverter x:Key="cvt" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,7 +28,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding Name}"/>
+                    <Button Content="{Binding Name,Converter={StaticResource cvt}}"
+                            Command="{Binding Command}"
+                            CommandParameter="{Binding ViewName}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

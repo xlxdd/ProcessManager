@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessManager", "ProcessManager\ProcessManager.csproj", "{ED1D3592-56F2-4119-8D34-51E9978D74C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{FA625F2D-A2C5-4939-8B96-348AB6C1089B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{FA625F2D-A2C5-4939-8B96-348AB6C1089B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_CultureCountyOverrides = en=en-001
 		SolutionGuid = {05EA9826-AC49-4112-BFC1-9194D8B47D2F}
 	EndGlobalSection
 EndGlobal

@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.Utils;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace ProcessManager.ViewModels.Dialogs;
 

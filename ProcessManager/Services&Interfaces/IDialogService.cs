@@ -1,5 +1,5 @@
 ﻿using ProcessManager.ViewModels.Dialogs;
-using System.Windows.Controls;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ProcessManager.Services_Interfaces;
 /// <summary>
