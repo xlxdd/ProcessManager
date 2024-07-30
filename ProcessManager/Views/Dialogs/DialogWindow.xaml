@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProcessManager.Views.Dialogs"
+        xmlns:r="clr-namespace:ProcessManager.Resources"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="{Binding Title}"
@@ -24,11 +25,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
-                    Content="确定"
+                    Content="{Binding [b_confirm],Source={x:Static r:LanguageManager.Instance}}"
                     Command="{Binding ConfirmCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
             <Button Grid.Column="1"
-                    Content="取消"
+                    Content="{Binding [b_cancel],Source={x:Static r:LanguageManager.Instance}}"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
         </Grid>

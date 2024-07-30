@@ -6,53 +6,69 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ProcessManager.Views"
              xmlns:vm="clr-namespace:ProcessManager.ViewModels"
+             xmlns:cvt ="clr-namespace:ProcessManager.Converters"
+             xmlns:r="clr-namespace:ProcessManager.Resources"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <cvt:BoolReverseConverter x:Key="cvt"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
-            <DataGrid  ItemsSource="{Binding Processes}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows ="False" CanUserDeleteRows="False">
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Auto">
+            <DataGrid  ItemsSource="{Binding Processes}"
+                       AutoGenerateColumns="False"
+                       IsReadOnly="True"
+                       CanUserAddRows="False"
+                       CanUserDeleteRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="优先级"
+                    <DataGridTextColumn Header="{Binding [p_priority],Source={x:Static r:LanguageManager.Instance}}"
                                         Binding="{Binding ProcessStartingOptions.Priority}" />
-                    <DataGridTextColumn Header="进程名称"
+                    <DataGridTextColumn Header="{Binding [p_name],Source={x:Static r:LanguageManager.Instance}}"
                                         Binding="{Binding ProcessStartingOptions.Name.Chinese}" />
-                    <DataGridTextColumn Header="CPU占用"
+                    <DataGridTextColumn Header="{Binding [p_CPU],Source={x:Static r:LanguageManager.Instance}}"
                                         Binding="{Binding ProcessRealtimeInfo.CPUUsage}" />
-                    <DataGridTextColumn Header="内存占用"
+                    <DataGridTextColumn Header="{Binding [p_RAM],Source={x:Static r:LanguageManager.Instance}}"
                                         Binding="{Binding ProcessRealtimeInfo.RAMUsage}" />
-                    <DataGridTextColumn Header="进程状态"
+                    <DataGridTextColumn Header="{Binding [p_status],Source={x:Static r:LanguageManager.Instance}}"
                                         Binding="{Binding ProcessRealtimeInfo.ProcessStatus}" />
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="操作" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding [p_operation],Source={x:Static r:LanguageManager.Instance}}"
+                                       HorizontalAlignment="Center" />
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="启动"
+                                    <Button Content="{Binding [o_start],Source={x:Static r:LanguageManager.Instance}}"
+                                            IsEnabled="{Binding Running,Converter={StaticResource cvt}}"
                                             Command="{Binding DataContext.StartCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="关闭"
+                                    <Button Content="{Binding [o_close],Source={x:Static r:LanguageManager.Instance}}"
+                                            IsEnabled="{Binding Running}"
                                             Command="{Binding DataContext.StopCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="显示界面"
+                                    <Button Content="{Binding [o_show],Source={x:Static r:LanguageManager.Instance}}"
+                                            IsEnabled="{Binding Running}"
                                             Command="{Binding DataContext.ShowCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="隐藏界面"
+                                    <Button Content="{Binding [o_hide],Source={x:Static r:LanguageManager.Instance}}"
+                                            IsEnabled="{Binding Running}"
                                             Command="{Binding DataContext.HideCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="编辑"
+                                    <Button Content="{Binding [o_edit],Source={x:Static r:LanguageManager.Instance}}"
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="删除"
+                                    <Button Content="{Binding [o_del],Source={x:Static r:LanguageManager.Instance}}"
                                             Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="查看详情"
+                                    <Button Content="{Binding [o_detail],Source={x:Static r:LanguageManager.Instance}}"
                                             Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                 </StackPanel>
@@ -73,7 +89,8 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Content="{Binding Name}" 
-                            Command="{Binding Command}"/>
+                            Command="{Binding Command}"
+                            Width="150" Margin="5 0"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

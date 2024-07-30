@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace ProcessManager
+namespace ProcessManager.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -13,11 +13,6 @@ namespace ProcessManager
         {
             DataContext = vm;
             InitializeComponent();
-        }
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
         }
     }
 }

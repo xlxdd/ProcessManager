@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="b_browser" xml:space="preserve">
+    <value>浏览</value>
+  </data>
+  <data name="b_cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="b_confirm" xml:space="preserve">
+    <value>确定</value>
+  </data>
   <data name="e_number" xml:space="preserve">
     <value>编号不为空</value>
     <comment>e_ 报错信息</comment>
@@ -128,44 +137,69 @@
     <value>设置</value>
     <comment>f_ 功能菜单</comment>
   </data>
+  <data name="o_close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="o_del" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="o_detail" xml:space="preserve">
+    <value>查看详情</value>
+  </data>
+  <data name="o_edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="o_hide" xml:space="preserve">
+    <value>隐藏界面</value>
+  </data>
+  <data name="o_show" xml:space="preserve">
+    <value>显示界面</value>
+  </data>
+  <data name="o_start" xml:space="preserve">
+    <value>启动</value>
+    <comment>o_操作</comment>
+  </data>
   <data name="process_closeMode" xml:space="preserve">
-    <value>关闭方式</value>
+    <value>关闭方式：</value>
   </data>
   <data name="process_delayTime" xml:space="preserve">
-    <value>延迟时间</value>
+    <value>延迟时间：</value>
+  </data>
+  <data name="process_enable" xml:space="preserve">
+    <value>启用</value>
   </data>
   <data name="process_maxCPU" xml:space="preserve">
-    <value>CPU占用重启</value>
+    <value>CPU占用重启：</value>
   </data>
   <data name="process_maxRAM" xml:space="preserve">
-    <value>内存占用重启</value>
+    <value>内存占用重启：</value>
   </data>
   <data name="process_name" xml:space="preserve">
-    <value>名称</value>
+    <value>名称：</value>
   </data>
   <data name="process_number" xml:space="preserve">
-    <value>编号</value>
+    <value>编号：</value>
   </data>
   <data name="process_overTimeTime" xml:space="preserve">
-    <value>超时时间</value>
+    <value>超时时间：</value>
   </data>
   <data name="process_parameter" xml:space="preserve">
-    <value>启动参数</value>
+    <value>启动参数：</value>
   </data>
   <data name="process_path" xml:space="preserve">
-    <value>启动路径</value>
+    <value>启动路径：</value>
   </data>
   <data name="process_processCount" xml:space="preserve">
-    <value>进程数</value>
+    <value>进程数：</value>
   </data>
   <data name="process_showMode" xml:space="preserve">
-    <value>显示方式</value>
+    <value>显示方式：</value>
   </data>
   <data name="process_startMode" xml:space="preserve">
-    <value>启动方式</value>
+    <value>启动方式：</value>
   </data>
   <data name="process_windowCount" xml:space="preserve">
-    <value>窗口数</value>
+    <value>窗口数：</value>
     <comment>process_ 进程添加页面</comment>
   </data>
   <data name="p_CPU" xml:space="preserve">
@@ -193,6 +227,15 @@
   <data name="s_English" xml:space="preserve">
     <value>英文</value>
     <comment>s_ 设置页面</comment>
+  </data>
+  <data name="t_add" xml:space="preserve">
+    <value>添加进程</value>
+  </data>
+  <data name="t_del" xml:space="preserve">
+    <value>删除进程</value>
+  </data>
+  <data name="t_detail" xml:space="preserve">
+    <value>进程信息</value>
   </data>
   <data name="window_title" xml:space="preserve">
     <value>进程管理</value>

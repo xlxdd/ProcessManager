@@ -28,12 +28,13 @@ public partial class ProcessViewModel : ViewModelBase
     IEnumerable<FunctionButton> functions;
     private readonly IDialogService _dialogService;
     private Dog watchDog;
+    private static int times = 10;
     public ProcessViewModel(IDialogService dialogService)
     {
         _dialogService = dialogService;
         ///设置功能列表
         Functions = new List<FunctionButton>() {
-            new FunctionButton(){Name="添加进程",Command = AddCommand},
+            new FunctionButton(){Name="添加进程",Command=AddCommand},
             new FunctionButton(){Name="关闭所有进程",Command=StopAllCommand},
             new FunctionButton(){Name="启动所有进程",Command=StartAllCommand},
         };
@@ -51,11 +52,12 @@ public partial class ProcessViewModel : ViewModelBase
         var opts = JsonUtils.ReadfromJson<IEnumerable<ProcessStartingOptions?>>(filePath);
         foreach (var opt in opts)
         {
-            Processes.Add(new ProcessInfo { ProcessName = StringUtils.FullNameToProcessName(opt.Path), ProcessStartingOptions = opt,Running = false });
+            Processes.Add(new ProcessInfo { ProcessName = StringUtils.FullNameToProcessName(opt!.Path!), ProcessStartingOptions = opt, Running = false });
         }
-        await Task.Run(() =>
+        var tasks = new List<Task>();
+        foreach (var p in Processes)
         {
-            foreach (var p in Processes)
+            tasks.Add(Task.Run(async () =>
             {
                 try
                 {
@@ -64,18 +66,25 @@ public partial class ProcessViewModel : ViewModelBase
                     if (processes.Length == 1)
                     {
                         p.Process = processes[0];
+                        p.Running = true;
+                    }
+                    else if (processes.Length == 0 && p.ProcessStartingOptions!.StartingOption == StartingOptions.OpenWhenBoot)
+                    {
+                        await Task.Delay(p.ProcessStartingOptions.DelayTime.GetValueOrDefault());
+                        //超时重启的逻辑写在Start()中，因为理论上每一次启动时都需要超时重启，并不应该是只有第一次启动时需要考虑超时重启
+                        await Start(p);
                     }
                 }
                 catch
                 {
-                    //TODO:这里最好有个弹窗
-                    Console.WriteLine($"");
+                    //TODO:这里最好有点响应 但是还没想好响应什么
                 }
                 //这一步会非常耗时
-                //传入实例名称 添加性能监视
-                p.Watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName);
-            }
-        });
+                //传入实例名称 添加性能监视器
+                p.Watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName!);
+            }));
+        }
+        await Task.WhenAll(tasks);
     }
 
     /// <summary>
@@ -88,7 +97,10 @@ public partial class ProcessViewModel : ViewModelBase
         foreach (var p in Processes)
         {
             if (null != p && null != p.Watcher)
+            {
                 p.ProcessRealtimeInfo = p.Watcher.Watch();
+                p.Running = (p.ProcessRealtimeInfo.ProcessStatus == ProcessStatus.Running);
+            }
         }
     }
     /// <summary>
@@ -96,7 +108,7 @@ public partial class ProcessViewModel : ViewModelBase
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void RestartProcess(Object? sender, EventArgs e)
+    private async void RestartProcess(Object? sender, EventArgs e)
     {
         foreach (var p in Processes)
         {
@@ -105,7 +117,7 @@ public partial class ProcessViewModel : ViewModelBase
                 if (p.ProcessRealtimeInfo!.CPUUsage > p.ProcessStartingOptions.MaxCPUUsage)
                 {
                     Stop(p);
-                    Start(p);
+                    await Start(p);
                 }
             }
             if (true == p.ProcessStartingOptions!.EnableMaxRAMUsage)
@@ -113,18 +125,22 @@ public partial class ProcessViewModel : ViewModelBase
                 if (p.ProcessRealtimeInfo!.RAMUsage > p.ProcessStartingOptions.MaxRAMUsage)
                 {
                     Stop(p);
-                    Start(p);
+                    await Start(p);
                 }
             }
         }
     }
+    /// <summary>
+    /// 新增的需要手动启动
+    /// </summary>
     [RelayCommand]
     public void Add()
     {
         var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("添加进程", new object());
         if (res != null)
         {
-            Processes.Add(new ProcessInfo { ProcessStartingOptions = res });
+            var name = StringUtils.FullNameToProcessName(res!.Path!);
+            Processes.Add(new ProcessInfo { ProcessName = name, ProcessStartingOptions = res, Running = false, Watcher = new ProcessUtils.GeneralProcessWatcher(name)});
         }
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
         string outputPath = @"opt.json";
@@ -134,11 +150,11 @@ public partial class ProcessViewModel : ViewModelBase
     /// 开启全部
     /// </summary>
     [RelayCommand]
-    public void StartAll()
+    public async Task StartAll()
     {
         foreach (var processInfo in Processes)
         {
-            Start(processInfo);
+            await Start(processInfo);
         }
     }
     /// <summary>
@@ -157,11 +173,30 @@ public partial class ProcessViewModel : ViewModelBase
     /// </summary>
     /// <param name="processInfo"></param>
     [RelayCommand]
-    public void Start(ProcessInfo processInfo)
+    public async Task<bool> Start(ProcessInfo processInfo)
     {
+        //先用性能监视器拦截一次
+        if (processInfo.Running == true) return false;
+        //可能程序在跑但是监视器是一秒刷新一次，状态没有更新，因此还要检测一次进程是否已经开启过了
+        try
+        {
+            //获取所有与指定名称匹配的进程 实际上只允许有一个 根据名称匹配确实也做不出多进程
+            Process[] processes = Process.GetProcessesByName(processInfo.ProcessName);
+            if (processes.Length == 1)
+            {
+                processInfo.Process = processes[0];
+                processInfo.Running = true;
+                return true;
+            }
+        }
+        catch
+        {
+            return false;
+        }
+        //经过判断 进程确实没有开启
         Process p = new();
-        p.StartInfo.FileName = processInfo.ProcessStartingOptions.Path;
-        p.StartInfo.Arguments = processInfo.ProcessStartingOptions.Parameters;
+        p.StartInfo.FileName = processInfo.ProcessStartingOptions!.Path;
+        p.StartInfo.Arguments = processInfo.ProcessStartingOptions!.Parameters;
         //设置显示方式
         switch (processInfo.ProcessStartingOptions.ShowingOption)
         {
@@ -175,7 +210,7 @@ public partial class ProcessViewModel : ViewModelBase
                 break;
         }
         processInfo.Process = p;
-        p.Start();
+        return await TaskUtils.RetryManyTimes(()=> { p.Start(); }, processInfo.ProcessStartingOptions.OvertimeTime.GetValueOrDefault()*1000,times);
     }
     /// <summary>
     /// 关闭
@@ -184,6 +219,22 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Stop(ProcessInfo processInfo)
     {
+        if (processInfo.Running == false) return;
+        //可能程序已经挂了但是监视器是一秒刷新一次，状态没有更新，因此还要检测一次
+        try
+        {
+            //获取所有与指定名称匹配的进程 实际上只允许有一个 根据名称匹配确实也做不出多进程
+            Process[] processes = Process.GetProcessesByName(processInfo.ProcessName);
+            if (processes.Length != 1)
+            {
+                processInfo.Running = false;
+                return;
+            }
+        }
+        catch
+        {
+            return;
+        }
         processInfo.Process?.Kill();
     }
     #region show&hide
@@ -194,9 +245,6 @@ public partial class ProcessViewModel : ViewModelBase
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
     // 常量定义
     private const int SW_HIDE = 0;
     private const int SW_SHOW = 5;
@@ -204,16 +252,16 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Show(ProcessInfo processInfo)
     {
-        var p = processInfo.Process;
-        IntPtr hWnd = FindWindow(string.Empty, p.ProcessName);
+        if (processInfo.Process == null) return;
+        IntPtr hWnd = processInfo.Process.MainWindowHandle;
         if (hWnd == IntPtr.Zero) return;
         ShowWindow(hWnd, SW_SHOW);
     }
     [RelayCommand]
     public void Hide(ProcessInfo processInfo)
     {
-        var p = processInfo.Process;
-        IntPtr hWnd = FindWindow(string.Empty, p.ProcessName);
+        if (processInfo.Process == null) return;
+        IntPtr hWnd = processInfo.Process.MainWindowHandle;
         if (hWnd == IntPtr.Zero) return;
         ShowWindow(hWnd, SW_HIDE);
     }

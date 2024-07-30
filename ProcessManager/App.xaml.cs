@@ -5,7 +5,6 @@ using ProcessManager.Views;
 using System.Windows;
 using Application = System.Windows.Application;
 using UserControl = System.Windows.Controls.UserControl;
-using System.Windows.Controls;
 
 namespace ProcessManager
 {

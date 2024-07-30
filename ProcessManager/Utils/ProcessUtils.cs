@@ -49,7 +49,7 @@ public static class ProcessUtils
         /// </summary>
         /// <param name="name"></param>
         /// <param name="count"></param>
-        public GeneralProcessWatcher(string name, int count=1)
+        public GeneralProcessWatcher(string name, int count = 1)
         {
             for (int i = 0; i < count; i++)
             {

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Data;
 using ProcessManager.Resources;
-using System.Windows.Controls;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace ProcessManager.ViewModels;
@@ -40,6 +39,16 @@ public partial class MainViewModel : ViewModelBase
     public void Navigate(string viewName)
     {
         CurrentView = App.Current.Container.ResolveNamed<UserControl>(viewName);
+    }
+    [RelayCommand]
+    public void Hide()
+    {
+        App.Current.MainWindow.Hide();
+    }
+    [RelayCommand]
+    public void Minimize()
+    {
+        App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized;
     }
     [RelayCommand]
     public void Show()

@@ -11,7 +11,7 @@ public partial class ProcessInfo : ObservableObject
     /// <summary>
     /// 进程名称
     /// </summary>
-    public string ProcessName { get; set; }
+    public string? ProcessName { get; set; }
     public Process? Process { get; set; }
     /// <summary>
     /// 进程是否在运行 用于绑定button的enable状态

@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ProcessManager.Views"
+             xmlns:r="clr-namespace:ProcessManager.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-        <TextBlock Text="中文" VerticalAlignment="Center" />
-        <ToggleButton IsChecked="{Binding LangCheck}"
-                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
+        <TextBlock Text="{Binding [s_Chinese],Source={x:Static r:LanguageManager.Instance}}" VerticalAlignment="Center" />
+        <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
                       ToolTip="Default ToggleButton Style">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Checked">
@@ -21,6 +21,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ToggleButton>
-        <TextBlock Text="英文" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding [s_English],Source={x:Static r:LanguageManager.Instance}}" VerticalAlignment="Center"/>
     </StackPanel>
 </UserControl>

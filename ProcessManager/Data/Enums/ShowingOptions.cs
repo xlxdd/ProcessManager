@@ -16,9 +16,9 @@ public enum ShowingOptions
     /// </summary>
     [Description("显示")]
     Show = 1,
-    /// <summary>
-    /// 程序内部显示
-    /// </summary>
-    [Description("程序内部显示")]
-    ShowInternal = 2,
+    ///// <summary>
+    ///// 程序内部显示
+    ///// </summary>
+    //[Description("程序内部显示")]
+    //ShowInternal = 2,
 }
