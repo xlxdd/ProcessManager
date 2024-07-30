@@ -44,7 +44,12 @@ public static class ProcessUtils
     public class GeneralProcessWatcher
     {
         private List<ProcessWatcher> watcher = new();
-        public GeneralProcessWatcher(string name, int count)
+        /// <summary>
+        /// 本来在考虑多进程的情况，但是后来又说没有多进程，将count设置默认值1
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="count"></param>
+        public GeneralProcessWatcher(string name, int count=1)
         {
             for (int i = 0; i < count; i++)
             {

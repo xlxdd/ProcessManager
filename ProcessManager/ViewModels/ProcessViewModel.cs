@@ -9,6 +9,7 @@ using ProcessManager.ViewModels.Dialogs;
 using ProcessManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using DialogResult = ProcessManager.Data.DialogResult;
 
 namespace ProcessManager.ViewModels;
@@ -33,8 +34,8 @@ public partial class ProcessViewModel : ViewModelBase
         ///设置功能列表
         Functions = new List<FunctionButton>() {
             new FunctionButton(){Name="添加进程",Command = AddCommand},
-            new FunctionButton(){Name="关闭所有进程"},
-            new FunctionButton(){Name="启动所有进程"},
+            new FunctionButton(){Name="关闭所有进程",Command=StopAllCommand},
+            new FunctionButton(){Name="启动所有进程",Command=StartAllCommand},
         };
         Processes = new ObservableCollection<ProcessInfo>();
         //读配置
@@ -50,15 +51,29 @@ public partial class ProcessViewModel : ViewModelBase
         var opts = JsonUtils.ReadfromJson<IEnumerable<ProcessStartingOptions?>>(filePath);
         foreach (var opt in opts)
         {
-            Processes.Add(new ProcessInfo { ProcessName = StringUtils.FullNameToProcessName(opt.Path), ProcessStartingOptions = opt });
+            Processes.Add(new ProcessInfo { ProcessName = StringUtils.FullNameToProcessName(opt.Path), ProcessStartingOptions = opt,Running = false });
         }
         await Task.Run(() =>
         {
             foreach (var p in Processes)
             {
+                try
+                {
+                    //获取所有与指定名称匹配的进程 实际上只允许有一个 根据名称匹配确实也做不出多进程
+                    Process[] processes = Process.GetProcessesByName(p.ProcessName);
+                    if (processes.Length == 1)
+                    {
+                        p.Process = processes[0];
+                    }
+                }
+                catch
+                {
+                    //TODO:这里最好有个弹窗
+                    Console.WriteLine($"");
+                }
                 //这一步会非常耗时
-                //添加性能监视
-                p.watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName, p.ProcessStartingOptions.ProcessCount);
+                //传入实例名称 添加性能监视
+                p.Watcher = new ProcessUtils.GeneralProcessWatcher(p.ProcessName);
             }
         });
     }
@@ -72,8 +87,8 @@ public partial class ProcessViewModel : ViewModelBase
     {
         foreach (var p in Processes)
         {
-            if (null != p && null != p.watcher)
-                p.ProcessRealtimeInfo = p.watcher.Watch();
+            if (null != p && null != p.Watcher)
+                p.ProcessRealtimeInfo = p.Watcher.Watch();
         }
     }
     /// <summary>
@@ -106,7 +121,6 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Add()
     {
-        //为什么这里传不了null
         var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("添加进程", new object());
         if (res != null)
         {
@@ -145,28 +159,23 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Start(ProcessInfo processInfo)
     {
-        //获取进程数量（考虑多进程的情况）
-        int processNum = processInfo.ProcessStartingOptions.ProcessCount;
-        for (int i = 0; i < processNum; i++)
+        Process p = new();
+        p.StartInfo.FileName = processInfo.ProcessStartingOptions.Path;
+        p.StartInfo.Arguments = processInfo.ProcessStartingOptions.Parameters;
+        //设置显示方式
+        switch (processInfo.ProcessStartingOptions.ShowingOption)
         {
-            Process p = new();
-            processInfo.processes.Add(p);
-            p.StartInfo.FileName = processInfo.ProcessStartingOptions.Path;
-            p.StartInfo.Arguments = processInfo.ProcessStartingOptions.Parameters;
-            //设置显示方式
-            switch (processInfo.ProcessStartingOptions.ShowingOption)
-            {
-                case ShowingOptions.Hide:
-                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    break;
-                case ShowingOptions.Show:
-                    p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                    break;
-                default:
-                    break;
-            }
-            p.Start();
+            case ShowingOptions.Hide:
+                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                break;
+            case ShowingOptions.Show:
+                p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                break;
+            default:
+                break;
         }
+        processInfo.Process = p;
+        p.Start();
     }
     /// <summary>
     /// 关闭
@@ -175,28 +184,40 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Stop(ProcessInfo processInfo)
     {
-        foreach (Process p in processInfo.processes)
-        {
-            //使用kill,只有Kill能关闭没有图形界面的进程
-            p.Kill(true);
-        }
+        processInfo.Process?.Kill();
     }
+    #region show&hide
     /// <summary>
-    /// Show和Hide实际上要进行重启 不重启怎么做到显示界面，我再查查
+    /// Show和Hide要调用WindowsAPI
     /// </summary>
+    // P/Invoke 声明
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+    // 常量定义
+    private const int SW_HIDE = 0;
+    private const int SW_SHOW = 5;
+
     [RelayCommand]
     public void Show(ProcessInfo processInfo)
     {
-        foreach (Process p in processInfo.processes)
-        {
-            p.StartInfo.CreateNoWindow = false;
-        }
+        var p = processInfo.Process;
+        IntPtr hWnd = FindWindow(string.Empty, p.ProcessName);
+        if (hWnd == IntPtr.Zero) return;
+        ShowWindow(hWnd, SW_SHOW);
     }
     [RelayCommand]
     public void Hide(ProcessInfo processInfo)
     {
-
+        var p = processInfo.Process;
+        IntPtr hWnd = FindWindow(string.Empty, p.ProcessName);
+        if (hWnd == IntPtr.Zero) return;
+        ShowWindow(hWnd, SW_HIDE);
     }
+    #endregion
     [RelayCommand]
     public void Edit(ProcessInfo processInfo)
     {
@@ -217,8 +238,8 @@ public partial class ProcessViewModel : ViewModelBase
         //取消
         if (null == res) return;
         //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我管吗？）2移除监视器 3删除processInfo 4修改json
-        if (null != processInfo.watcher) processInfo.watcher.Dispose();
-        if (null != processInfo.processes) { foreach (var p in processInfo.processes) p.Kill(); }
+        if (null != processInfo.Watcher) processInfo.Watcher.Dispose();
+        if (null != processInfo.Process) processInfo.Process.Kill();
         Processes.Remove(processInfo);
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
         string outputPath = @"opt.json";
