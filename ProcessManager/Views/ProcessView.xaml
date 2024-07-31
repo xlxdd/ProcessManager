@@ -88,7 +88,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding Name}" 
+                    <Button Content="{Binding Name,Converter={StaticResource idx}}" 
                             Command="{Binding Command}"
                             Width="150" Margin="5 0"/>
                 </DataTemplate>

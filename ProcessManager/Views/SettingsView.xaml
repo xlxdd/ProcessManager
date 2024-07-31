@@ -14,10 +14,12 @@
                       ToolTip="Default ToggleButton Style">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Checked">
-                    <i:InvokeCommandAction Command="{Binding LangChangeCommand}" CommandParameter="en-US" />
+                    <i:InvokeCommandAction Command="{Binding LangChangeCommand}"
+                                           CommandParameter="en-US" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="Unchecked">
-                    <i:InvokeCommandAction Command="{Binding LangChangeCommand}" CommandParameter="zh-CN" />
+                    <i:InvokeCommandAction Command="{Binding LangChangeCommand}"
+                                           CommandParameter="zh-CN" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ToggleButton>

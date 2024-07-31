@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Data;
 using ProcessManager.Data.Enums;
+using ProcessManager.Resources;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.Services_Interfaces.WatchDog;
 using ProcessManager.Utils;
@@ -34,9 +35,16 @@ public partial class ProcessViewModel : ViewModelBase
         _dialogService = dialogService;
         ///设置功能列表
         Functions = new List<FunctionButton>() {
-            new FunctionButton(){Name="添加进程",Command=AddCommand},
-            new FunctionButton(){Name="关闭所有进程",Command=StopAllCommand},
-            new FunctionButton(){Name="启动所有进程",Command=StartAllCommand},
+            new FunctionButton(){Name="f_add",Command=AddCommand},
+            new FunctionButton(){Name="f_closeAll",Command=StopAllCommand},
+            new FunctionButton(){Name="f_startAll",Command=StartAllCommand},
+        };
+        LanguageManager.Instance.PropertyChanged += (s, e) =>
+        {
+            foreach (FunctionButton button in Functions)
+            {
+                button.ChangeCulture();
+            }
         };
         Processes = new ObservableCollection<ProcessInfo>();
         //读配置
@@ -136,7 +144,7 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Add()
     {
-        var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("添加进程", new object());
+        var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("t_add", new object());
         if (res != null)
         {
             var name = StringUtils.FullNameToProcessName(res!.Path!);
@@ -269,7 +277,7 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Edit(ProcessInfo processInfo)
     {
-        var res = _dialogService.OpenDialog<EditDialogView, EditDialogViewModel, ProcessStartingOptions>("修改信息", processInfo);
+        var res = _dialogService.OpenDialog<EditDialogView, EditDialogViewModel, ProcessStartingOptions>("t_edit", processInfo);
         if (res != null)
         {
             //传的都是引用，直接改
@@ -282,7 +290,7 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void Delete(ProcessInfo processInfo)
     {
-        var res = _dialogService.OpenDialog<DeleteConfirmDialogView, DeleteConfiremDialogViewModel, DialogResult?>("警告", "确认删除？");
+        var res = _dialogService.OpenDialog<DeleteConfirmDialogView, DeleteConfiremDialogViewModel, DialogResult?>("t_del", "m_del");
         //取消
         if (null == res) return;
         //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我管吗？）2移除监视器 3删除processInfo 4修改json
@@ -296,6 +304,6 @@ public partial class ProcessViewModel : ViewModelBase
     [RelayCommand]
     public void ShowInfo(ProcessInfo processInfo)
     {
-        var _ = _dialogService.OpenDialog<InfoDialogView, InfoDialogViewModel, object>("进程信息", processInfo);
+        var _ = _dialogService.OpenDialog<InfoDialogView, InfoDialogViewModel, object>("t_detail", processInfo);
     }
 }

@@ -153,9 +153,6 @@
   <data name="p_status" xml:space="preserve">
     <value>Process status</value>
   </data>
-  <data name="e_number" xml:space="preserve">
-    <value>Number is not empty</value>
-  </data>
   <data name="process_closeMode" xml:space="preserve">
     <value>Closing method:</value>
   </data>
@@ -221,5 +218,113 @@
   </data>
   <data name="process_enable" xml:space="preserve">
     <value>Enable</value>
+  </data>
+  <data name="b_browser" xml:space="preserve">
+    <value>browse</value>
+  </data>
+  <data name="t_add" xml:space="preserve">
+    <value>Add Process</value>
+  </data>
+  <data name="t_del" xml:space="preserve">
+    <value>Delete Process</value>
+  </data>
+  <data name="t_detail" xml:space="preserve">
+    <value>Process information</value>
+  </data>
+  <data name="f_add" xml:space="preserve">
+    <value>Add Process</value>
+  </data>
+  <data name="f_closeAll" xml:space="preserve">
+    <value>Close all processes</value>
+  </data>
+  <data name="f_startAll" xml:space="preserve">
+    <value>Start all processes</value>
+  </data>
+  <data name="e_namenotnull" xml:space="preserve">
+    <value>The name is not empty.</value>
+  </data>
+  <data name="m_del" xml:space="preserve">
+    <value>Are you sure to delete?</value>
+  </data>
+  <data name="t_edit" xml:space="preserve">
+    <value>Editing process</value>
+  </data>
+  <data name="e_cpunotnull" xml:space="preserve">
+    <value>CPU usage is not empty.</value>
+  </data>
+  <data name="e_cpurange" xml:space="preserve">
+    <value>The CPU usage needs to be between 1-100.</value>
+  </data>
+  <data name="e_delaynotnull" xml:space="preserve">
+    <value>The delay time is not empty.</value>
+  </data>
+  <data name="e_delayrange" xml:space="preserve">
+    <value>The delay time is an integer greater than or equal to 0.</value>
+  </data>
+  <data name="e_numbernotnull" xml:space="preserve">
+    <value>The number is not empty.</value>
+  </data>
+  <data name="e_numberrange" xml:space="preserve">
+    <value>The number needs to be an integer greater than 0.</value>
+  </data>
+  <data name="e_otnotnull" xml:space="preserve">
+    <value>The timeout period is not empty.</value>
+  </data>
+  <data name="e_otrange" xml:space="preserve">
+    <value>The timeout period needs to be an integer greater than 0.</value>
+  </data>
+  <data name="e_pathnotnull" xml:space="preserve">
+    <value>The startup path is not empty.</value>
+  </data>
+  <data name="e_processnotnull" xml:space="preserve">
+    <value>The number of processes is not empty.</value>
+  </data>
+  <data name="e_processrange" xml:space="preserve">
+    <value>The number of processes needs to be an integer greater than 0.</value>
+  </data>
+  <data name="e_ramnotnull" xml:space="preserve">
+    <value>The RAM usage is not empty.</value>
+  </data>
+  <data name="e_ramrange" xml:space="preserve">
+    <value>The RAM usage needs to be an integer greater than 0.</value>
+  </data>
+  <data name="e_windownotnull" xml:space="preserve">
+    <value>The number of windows is not empty.</value>
+  </data>
+  <data name="e_windowrange" xml:space="preserve">
+    <value>The number of windows needs to be an integer greater than 0.</value>
+  </data>
+  <data name="enum_forceclose" xml:space="preserve">
+    <value>Forced closure</value>
+  </data>
+  <data name="enum_signalclose" xml:space="preserve">
+    <value>Signal off</value>
+  </data>
+  <data name="enum_messageclose" xml:space="preserve">
+    <value>SendMessage closed</value>
+  </data>
+  <data name="enum_selfclose" xml:space="preserve">
+    <value>Program self controlled shutdown</value>
+  </data>
+  <data name="enum_donothing" xml:space="preserve">
+    <value>Not controlling</value>
+  </data>
+  <data name="enum_running" xml:space="preserve">
+    <value>function</value>
+  </data>
+  <data name="enum_closed" xml:space="preserve">
+    <value>close</value>
+  </data>
+  <data name="enum_hide" xml:space="preserve">
+    <value>hide</value>
+  </data>
+  <data name="enum_show" xml:space="preserve">
+    <value>display</value>
+  </data>
+  <data name="enum_bootstart" xml:space="preserve">
+    <value>Power on and start up</value>
+  </data>
+  <data name="enum_bootnotstart" xml:space="preserve">
+    <value>Power on does not start</value>
   </data>
 </root>

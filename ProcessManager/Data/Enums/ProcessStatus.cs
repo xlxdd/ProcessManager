@@ -9,11 +9,11 @@ public enum ProcessStatus
     /// <summary>
     /// 运行
     /// </summary>
-    [Description("运行")]
+    [Description("enum_running")]
     Running = 0,
     /// <summary>
     /// 关闭
     /// </summary>
-    [Description("关闭")]
+    [Description("enum_closed")]
     Closed = 1,
 }

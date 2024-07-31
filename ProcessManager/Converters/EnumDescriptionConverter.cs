@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ProcessManager.Resources;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
@@ -15,7 +16,7 @@ public class EnumDescriptionConverter : IValueConverter
     {
         Enum myEnum = (Enum)value;
         string description = GetEnumDescription(myEnum);
-        return description;
+        return LanguageManager.Instance[description];
     }
 
     object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

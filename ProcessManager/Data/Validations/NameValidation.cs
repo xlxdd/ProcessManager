@@ -7,7 +7,7 @@ public class NameValidator : ValidationRule
 {
     public override ValidationResult Validate(object value, CultureInfo cultureInfo)
     {
-        if (value == null || string.IsNullOrWhiteSpace(value.ToString())) return new ValidationResult(false, "名称不为空。");
+        if (value == null || string.IsNullOrWhiteSpace(value.ToString())) return new ValidationResult(false, "e_namenotnull");
         return ValidationResult.ValidResult;
     }
 }

@@ -9,12 +9,12 @@ public enum ShowingOptions
     /// <summary>
     /// 隐藏
     /// </summary>
-    [Description("隐藏")]
+    [Description("enum_hide")]
     Hide = 0,
     /// <summary>
     /// 显示
     /// </summary>
-    [Description("显示")]
+    [Description("enum_show")]
     Show = 1,
     ///// <summary>
     ///// 程序内部显示

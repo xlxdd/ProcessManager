@@ -126,9 +126,60 @@
   <data name="b_confirm" xml:space="preserve">
     <value>确定</value>
   </data>
-  <data name="e_number" xml:space="preserve">
-    <value>编号不为空</value>
+  <data name="e_cpunotnull" xml:space="preserve">
+    <value>CPU占用不为空。</value>
+  </data>
+  <data name="e_cpurange" xml:space="preserve">
+    <value>CPU占用需要在1-100之间。</value>
+  </data>
+  <data name="e_delaynotnull" xml:space="preserve">
+    <value>延迟时间不为空。</value>
+  </data>
+  <data name="e_delayrange" xml:space="preserve">
+    <value>延迟时间为大于等于0的整数。</value>
+  </data>
+  <data name="e_namenotnull" xml:space="preserve">
+    <value>名称不为空。</value>
+  </data>
+  <data name="e_numbernotnull" xml:space="preserve">
+    <value>编号不为空。</value>
     <comment>e_ 报错信息</comment>
+  </data>
+  <data name="e_numberrange" xml:space="preserve">
+    <value>编号需要为大于0的整数。</value>
+  </data>
+  <data name="e_otnotnull" xml:space="preserve">
+    <value>超时时间不为空。</value>
+  </data>
+  <data name="e_otrange" xml:space="preserve">
+    <value>超时时间需要为大于0的整数。</value>
+  </data>
+  <data name="e_pathnotnull" xml:space="preserve">
+    <value>启动路径不为空。</value>
+  </data>
+  <data name="e_processnotnull" xml:space="preserve">
+    <value>进程数不为空。</value>
+  </data>
+  <data name="e_processrange" xml:space="preserve">
+    <value>进程数需要为大于0的整数。</value>
+  </data>
+  <data name="e_ramnotnull" xml:space="preserve">
+    <value>RAM占用不为空。</value>
+  </data>
+  <data name="e_ramrange" xml:space="preserve">
+    <value>RAM占用需要为大于0的整数。</value>
+  </data>
+  <data name="e_windownotnull" xml:space="preserve">
+    <value>窗口数不为空。</value>
+  </data>
+  <data name="e_windowrange" xml:space="preserve">
+    <value>窗口数需要为大于0的整数。</value>
+  </data>
+  <data name="f_add" xml:space="preserve">
+    <value>添加进程</value>
+  </data>
+  <data name="f_closeAll" xml:space="preserve">
+    <value>关闭所有进程</value>
   </data>
   <data name="f_process" xml:space="preserve">
     <value>进程管理</value>
@@ -136,6 +187,13 @@
   <data name="f_setting" xml:space="preserve">
     <value>设置</value>
     <comment>f_ 功能菜单</comment>
+  </data>
+  <data name="f_startAll" xml:space="preserve">
+    <value>启动所有进程</value>
+  </data>
+  <data name="m_del" xml:space="preserve">
+    <value>确认删除？</value>
+    <comment>m_ 消息</comment>
   </data>
   <data name="o_close" xml:space="preserve">
     <value>关闭</value>
@@ -230,6 +288,7 @@
   </data>
   <data name="t_add" xml:space="preserve">
     <value>添加进程</value>
+    <comment>t_ 标题</comment>
   </data>
   <data name="t_del" xml:space="preserve">
     <value>删除进程</value>
@@ -237,7 +296,43 @@
   <data name="t_detail" xml:space="preserve">
     <value>进程信息</value>
   </data>
+  <data name="t_edit" xml:space="preserve">
+    <value>编辑进程</value>
+  </data>
   <data name="window_title" xml:space="preserve">
     <value>进程管理</value>
+  </data>
+  <data name="enum_forceclose" xml:space="preserve">
+    <value>强制关闭</value>
+  </data>
+  <data name="enum_signalclose" xml:space="preserve">
+    <value>信号关闭</value>
+  </data>
+  <data name="enum_messageclose" xml:space="preserve">
+    <value>SendMessage关闭</value>
+  </data>
+  <data name="enum_selfclose" xml:space="preserve">
+    <value>程序自行控制关闭</value>
+  </data>
+  <data name="enum_donothing" xml:space="preserve">
+    <value>不进行控制</value>
+  </data>
+  <data name="enum_running" xml:space="preserve">
+    <value>运行</value>
+  </data>
+  <data name="enum_closed" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="enum_hide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="enum_show" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="enum_bootstart" xml:space="preserve">
+    <value>开机启动</value>
+  </data>
+  <data name="enum_bootnotstart" xml:space="preserve">
+    <value>开机不启动</value>
   </data>
 </root>

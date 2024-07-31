@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ProcessManager.Converters;
 using ProcessManager.Data;
 using ProcessManager.Services_Interfaces;
+using System.Diagnostics;
+using System.IO;
 
 namespace ProcessManager.ViewModels.Dialogs;
 
@@ -23,6 +26,17 @@ public partial class InfoDialogViewModel : DialogBase, IDialogResult<object>
         ShowingOption = EnumDescriptionConverter.GetEnumDescription(Options!.ShowingOption);
         ClosingOption = EnumDescriptionConverter.GetEnumDescription(Options!.ClosingOption);
         StartingOption = EnumDescriptionConverter.GetEnumDescription(Options!.StartingOption);
+    }
+    [RelayCommand]
+    public void GetPath()
+    {
+        var filePath = Options!.Path;
+        var folderPath = Path.GetDirectoryName(filePath);
+
+        if (Directory.Exists(folderPath))
+        {
+            Process.Start("explorer.exe", folderPath);
+        }
     }
     public object GetResult()
     {

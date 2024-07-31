@@ -9,11 +9,11 @@ public enum StartingOptions
     /// <summary>
     /// 开机启动
     /// </summary>
-    [Description("开机启动")]
+    [Description("enum_bootstart")]
     OpenWhenBoot = 0,
     /// <summary>
     /// 开机不启动
     /// </summary>
-    [Description("开机不启动")]
+    [Description("enum_bootnotstart")]
     NotOpenWhenBoot = 1,
 }
