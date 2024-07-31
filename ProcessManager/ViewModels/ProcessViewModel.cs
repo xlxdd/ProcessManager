@@ -28,17 +28,17 @@ public partial class ProcessViewModel : ViewModelBase
     [ObservableProperty]
     IEnumerable<FunctionButton> functions;
     private readonly IDialogService _dialogService;
-    private Dog watchDog;
-    private static int times = 10;
+    private readonly Dog watchDog;
+    private static readonly int times = 10;
     public ProcessViewModel(IDialogService dialogService)
     {
         _dialogService = dialogService;
         ///设置功能列表
-        Functions = new List<FunctionButton>() {
-            new FunctionButton(){Name="f_add",Command=AddCommand},
-            new FunctionButton(){Name="f_closeAll",Command=StopAllCommand},
-            new FunctionButton(){Name="f_startAll",Command=StartAllCommand},
-        };
+        Functions = [
+            new (){Name="f_add",Command=AddCommand},
+            new (){Name="f_closeAll",Command=StopAllCommand},
+            new (){Name="f_startAll",Command=StartAllCommand},
+        ];
         LanguageManager.Instance.PropertyChanged += (s, e) =>
         {
             foreach (FunctionButton button in Functions)
@@ -46,7 +46,7 @@ public partial class ProcessViewModel : ViewModelBase
                 button.ChangeCulture();
             }
         };
-        Processes = new ObservableCollection<ProcessInfo>();
+        Processes = [];
         //读配置
         Init();
         //初始化看门狗
@@ -181,7 +181,7 @@ public partial class ProcessViewModel : ViewModelBase
     /// </summary>
     /// <param name="processInfo"></param>
     [RelayCommand]
-    public async Task<bool> Start(ProcessInfo processInfo)
+    public static async Task<bool> Start(ProcessInfo processInfo)
     {
         //先用性能监视器拦截一次
         if (processInfo.Running == true) return false;
@@ -225,7 +225,7 @@ public partial class ProcessViewModel : ViewModelBase
     /// </summary>
     /// <param name="processInfo"></param>
     [RelayCommand]
-    public void Stop(ProcessInfo processInfo)
+    public static void Stop(ProcessInfo processInfo)
     {
         if (processInfo.Running == false) return;
         //可能程序已经挂了但是监视器是一秒刷新一次，状态没有更新，因此还要检测一次
@@ -243,6 +243,7 @@ public partial class ProcessViewModel : ViewModelBase
         {
             return;
         }
+        processInfo.Watcher!.Dispose();
         processInfo.Process?.Kill();
     }
     #region show&hide
@@ -258,7 +259,7 @@ public partial class ProcessViewModel : ViewModelBase
     private const int SW_SHOW = 5;
 
     [RelayCommand]
-    public void Show(ProcessInfo processInfo)
+    public static void Show(ProcessInfo processInfo)
     {
         if (processInfo.Process == null) return;
         IntPtr hWnd = processInfo.Process.MainWindowHandle;
@@ -266,7 +267,7 @@ public partial class ProcessViewModel : ViewModelBase
         ShowWindow(hWnd, SW_SHOW);
     }
     [RelayCommand]
-    public void Hide(ProcessInfo processInfo)
+    public static void Hide(ProcessInfo processInfo)
     {
         if (processInfo.Process == null) return;
         IntPtr hWnd = processInfo.Process.MainWindowHandle;
@@ -294,8 +295,8 @@ public partial class ProcessViewModel : ViewModelBase
         //取消
         if (null == res) return;
         //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我管吗？）2移除监视器 3删除processInfo 4修改json
-        if (null != processInfo.Watcher) processInfo.Watcher.Dispose();
-        if (null != processInfo.Process) processInfo.Process.Kill();
+        processInfo.Watcher?.Dispose();
+        processInfo.Process?.Kill();
         Processes.Remove(processInfo);
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
         string outputPath = @"opt.json";

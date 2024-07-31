@@ -327,4 +327,10 @@
   <data name="enum_bootnotstart" xml:space="preserve">
     <value>Power on does not start</value>
   </data>
+  <data name="s_autolaunch" xml:space="preserve">
+    <value>AutoLaunch</value>
+  </data>
+  <data name="s_notlaunch" xml:space="preserve">
+    <value>NotLaunch</value>
+  </data>
 </root>

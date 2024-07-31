@@ -8,21 +8,44 @@
              xmlns:r="clr-namespace:ProcessManager.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-        <TextBlock Text="{Binding [s_Chinese],Source={x:Static r:LanguageManager.Instance}}" VerticalAlignment="Center" />
-        <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                      ToolTip="Default ToggleButton Style">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Checked">
-                    <i:InvokeCommandAction Command="{Binding LangChangeCommand}"
-                                           CommandParameter="en-US" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="Unchecked">
-                    <i:InvokeCommandAction Command="{Binding LangChangeCommand}"
-                                           CommandParameter="zh-CN" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ToggleButton>
-        <TextBlock Text="{Binding [s_English],Source={x:Static r:LanguageManager.Instance}}" VerticalAlignment="Center"/>
-    </StackPanel>
+    <UniformGrid Rows="2"
+                 Columns="2" >
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding [s_Chinese],Source={x:Static r:LanguageManager.Instance}}"
+                       VerticalAlignment="Center" />
+            <ToggleButton IsChecked="{Binding Lang}"
+                          Style="{StaticResource MaterialDesignSwitchToggleButton}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding LangChangeCommand}"
+                                               CommandParameter="en-US" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding LangChangeCommand}"
+                                               CommandParameter="zh-CN" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ToggleButton>
+            <TextBlock Text="{Binding [s_English],Source={x:Static r:LanguageManager.Instance}}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="{Binding [s_notlaunch],Source={x:Static r:LanguageManager.Instance}}"
+                       VerticalAlignment="Center" />
+            <ToggleButton IsChecked="{Binding Launch}"
+                          Style="{StaticResource MaterialDesignSwitchToggleButton}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding AutoLaunchCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding NotLaunchCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ToggleButton>
+            <TextBlock Text="{Binding [s_autolaunch],Source={x:Static r:LanguageManager.Instance}}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+    </UniformGrid>
 </UserControl>

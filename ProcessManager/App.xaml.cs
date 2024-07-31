@@ -1,7 +1,11 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Configuration;
+using ProcessManager.Resources;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.ViewModels;
 using ProcessManager.Views;
+using System.Configuration;
+using System.IO;
 using System.Windows;
 using Application = System.Windows.Application;
 using UserControl = System.Windows.Controls.UserControl;
@@ -18,9 +22,13 @@ namespace ProcessManager
         public App()
         {
             #region Configuration
+            var configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("settings.json",false,true);
+            var configurationCenter = configurationBuilder.Build();
             #endregion
             #region IOC
             var builder = new ContainerBuilder();
+            builder.RegisterInstance<IConfigurationRoot>(configurationCenter);
             builder.RegisterType<MainWindow>().SingleInstance();
             builder.RegisterType<MainViewModel>().SingleInstance();
             builder.RegisterType<ProcessView>().Named<UserControl>("Process").SingleInstance();

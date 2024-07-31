@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Autofac;
+using Microsoft.Extensions.Configuration;
+using System.ComponentModel;
 using System.Globalization;
 using System.Resources;
 
@@ -13,18 +15,22 @@ public class LanguageManager : INotifyPropertyChanged
     /// 资源
     /// </summary>
     private readonly ResourceManager _resourceManager;
-
-    /// <summary>
-    /// 懒加载
-    /// </summary>
-    private static readonly Lazy<LanguageManager> _lazy = new(() => new LanguageManager());
-
+    private readonly IConfigurationRoot _configurationCenter;
     public event PropertyChangedEventHandler? PropertyChanged;
+    private static readonly Lazy<LanguageManager> _lazy = new(() => new LanguageManager());
     public static LanguageManager Instance => _lazy.Value;
 
     public LanguageManager()
     {
-        //获取此命名空间下Resources的Lang的资源，Lang可以修改
+        _configurationCenter = App.Current.Container.Resolve<IConfigurationRoot>();
+        try
+        {
+            var s = _configurationCenter.GetSection("Lang").Value!;
+            var cultureInfo = new CultureInfo(s);
+            CultureInfo.CurrentCulture = cultureInfo;
+            CultureInfo.CurrentUICulture = cultureInfo;
+        }
+        catch { }
         _resourceManager = new ResourceManager("ProcessManager.Resources.Lang", typeof(LanguageManager).Assembly);
     }
 

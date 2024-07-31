@@ -21,10 +21,10 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         ///设置功能列表
-        Functions = new List<FunctionButton>() {
+        Functions = [
             new(){Name="f_process",Command=NavigateCommand,ViewName="Process"},
             new(){Name="f_setting",Command=NavigateCommand,ViewName="Settings"},
-        };
+        ];
         ///设置初始页面
         CurrentView = App.Current.Container.ResolveNamed<UserControl>("Process");
         LanguageManager.Instance.PropertyChanged += (s, e) =>
@@ -41,22 +41,22 @@ public partial class MainViewModel : ViewModelBase
         CurrentView = App.Current.Container.ResolveNamed<UserControl>(viewName);
     }
     [RelayCommand]
-    public void Hide()
+    public static void Hide()
     {
         App.Current.MainWindow.Hide();
     }
     [RelayCommand]
-    public void Minimize()
+    public static void Minimize()
     {
         App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized;
     }
     [RelayCommand]
-    public void Show()
+    public static void Show()
     {
         App.Current.MainWindow.Show();
     }
     [RelayCommand]
-    public void Exit()
+    public static void Exit()
     {
         App.Current.Shutdown();
     }

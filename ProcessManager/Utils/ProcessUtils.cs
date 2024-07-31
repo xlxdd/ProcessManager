@@ -12,9 +12,9 @@ public static class ProcessUtils
     /// </summary>
     private class ProcessWatcher
     {
-        private string instanceName;
-        private PerformanceCounter cpuCounter;
-        private PerformanceCounter ramCounter;
+        private readonly string instanceName;
+        private readonly PerformanceCounter cpuCounter;
+        private readonly PerformanceCounter ramCounter;
         public ProcessWatcher(string name)
         {
             instanceName = name;
@@ -43,7 +43,7 @@ public static class ProcessUtils
     /// </summary>
     public class GeneralProcessWatcher
     {
-        private List<ProcessWatcher> watcher = new();
+        private readonly List<ProcessWatcher> watcher = [];
         /// <summary>
         /// 本来在考虑多进程的情况，但是后来又说没有多进程，将count设置默认值1
         /// </summary>
@@ -70,10 +70,10 @@ public static class ProcessUtils
             var info = new ProcessRealtimeInfo() { CPUUsage = 0, RAMUsage = 0, ProcessStatus = ProcessStatus.Running };
             foreach (ProcessWatcher watcher in watcher)
             {
-                var res = watcher.Watch();
-                info.CPUUsage += res.cpu;
-                info.RAMUsage += res.ram;
-                if (res.running == false) info.ProcessStatus = ProcessStatus.Closed;
+                var (cpu, ram, running) = watcher.Watch();
+                info.CPUUsage += cpu;
+                info.RAMUsage += ram;
+                if (running == false) info.ProcessStatus = ProcessStatus.Closed;
             }
             return info;
         }
