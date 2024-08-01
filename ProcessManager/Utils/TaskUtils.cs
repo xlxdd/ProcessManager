@@ -9,7 +9,7 @@ public static class TaskUtils
     /// <param name="timeLimit">时间限制 单位:毫秒</param>
     /// <param name="FailureStrategy">失败策略</param>
     /// <returns></returns>
-    public static async Task<bool> FinishInTimeLimit(Action act,Action FailureStrategy, int timeLimit)
+    public static async Task<bool> FinishInTimeLimit(Action act, Action FailureStrategy, int timeLimit)
     {
         using (var cts = new CancellationTokenSource())
         {
@@ -40,7 +40,7 @@ public static class TaskUtils
     {
         for (int i = 0; i < times; i++)
         {
-            if (await FinishInTimeLimit(act,FailureStrategy,timeLimit)) return true;
+            if (await FinishInTimeLimit(act, FailureStrategy, timeLimit)) return true;
         }
         return false;
     }

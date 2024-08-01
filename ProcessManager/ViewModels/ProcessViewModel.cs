@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic.Logging;
 using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Resources;
@@ -9,11 +8,9 @@ using ProcessManager.Services_Interfaces.WatchDog;
 using ProcessManager.Utils;
 using ProcessManager.ViewModels.Dialogs;
 using ProcessManager.Views.Dialogs;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
 using DialogResult = ProcessManager.Data.DialogResult;
 
 namespace ProcessManager.ViewModels;
@@ -248,7 +245,7 @@ public partial class ProcessViewModel : ViewModelBase
         },
         processInfo.ProcessStartingOptions.OvertimeTime.GetValueOrDefault() * 1000,
         times);
-        if(processInfo.ProcessStartingOptions.ShowingOption == ShowingOptions.Hide)
+        if (processInfo.ProcessStartingOptions.ShowingOption == ShowingOptions.Hide)
         {
             //这个Thread.Sleep(1000);困扰了我几乎一天
             Thread.Sleep(1000);
