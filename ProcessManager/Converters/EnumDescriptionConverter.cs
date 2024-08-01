@@ -1,5 +1,4 @@
-﻿using Autofac;
-using ProcessManager.Resources;
+﻿using ProcessManager.Resources;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;

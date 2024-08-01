@@ -1,10 +1,9 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using ProcessManager.Resources;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.ViewModels;
 using ProcessManager.Views;
-using System.Configuration;
+using Serilog;
 using System.IO;
 using System.Windows;
 using Application = System.Windows.Application;
@@ -17,14 +16,20 @@ namespace ProcessManager
     /// </summary>
     public partial class App : Application
     {
-        public IContainer Container { get; }
+        public Autofac.IContainer Container { get; }
         public static new App Current => (App)Application.Current;
         public App()
         {
             #region Configuration
             var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("settings.json",false,true);
+            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("settings.json", false, true);
             var configurationCenter = configurationBuilder.Build();
+            #endregion
+            #region Log
+            Serilog.Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             #endregion
             #region IOC
             var builder = new ContainerBuilder();
@@ -41,9 +46,14 @@ namespace ProcessManager
         }
         protected override void OnStartup(StartupEventArgs e)
         {
+            Serilog.Log.Information("App starting");
             base.OnStartup(e);
+            Serilog.Log.Information("Requie MainWindow");
             MainWindow = Container.Resolve<MainWindow>();
+            Serilog.Log.Information("MainWindow aquired");
+            Serilog.Log.Information("ShowMainWindow");
             MainWindow.Show();
+            Serilog.Log.Information("MainWindowShowed");
         }
     }
 }

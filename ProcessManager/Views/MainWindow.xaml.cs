@@ -1,5 +1,4 @@
 ﻿using ProcessManager.ViewModels;
-using System.ComponentModel;
 using System.Windows;
 
 namespace ProcessManager.Views

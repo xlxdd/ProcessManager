@@ -39,8 +39,8 @@ public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStart
     public ProcessStartingOptions GetResult()
     {
         int errors = 0;
-        if(Options.EnableMaxCPUUsage!=true)errors++;
-        if(Options.EnableMaxRAMUsage!=true)errors++;
+        if (Options.EnableMaxCPUUsage != true) errors++;
+        if (Options.EnableMaxRAMUsage != true) errors++;
         //ErrorList留着备用，虽然目前是只要知道有没有错误就行了
         if (ErrorList.Count > errors) return null;
         return Options!;

@@ -1,22 +1,24 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
 using ProcessManager.Resources;
+using ProcessManager.Utils;
 using System.Globalization;
 using System.IO;
 using System.Text.Json.Nodes;
 
 namespace ProcessManager.ViewModels;
 
-public partial class SettingsViewModel: ViewModelBase
+public partial class SettingsViewModel : ViewModelBase
 {
     private readonly IConfigurationRoot _configurationCenter;
-    public bool Lang { get;set; }
-    public bool Launch { get; set; }
+    private readonly string execFileName = Environment.ProcessPath!;
+    public bool Lang { get; set; }
+    public bool AutoLaunch { get; set; }
     public SettingsViewModel(IConfigurationRoot configurationCenter)
     {
         _configurationCenter = configurationCenter;
         Lang = _configurationCenter.GetSection("Lang").Value == "en-US";
-        Launch = _configurationCenter.GetSection("AutoLaunch").Value == false;
+        AutoLaunch = _configurationCenter.GetSection("AutoLaunch").Value == "true";
     }
     [RelayCommand]
     public void LangChange(string culture)
@@ -26,7 +28,7 @@ public partial class SettingsViewModel: ViewModelBase
         {
             string json = File.ReadAllText("settings.json");
             JsonNode root = JsonNode.Parse(json)!;
-            root!["Lang"] = culture;
+            root![nameof(Lang)] = culture;
             File.WriteAllText("settings.json", root.ToJsonString());
         }
         finally
@@ -35,13 +37,35 @@ public partial class SettingsViewModel: ViewModelBase
         }
     }
     [RelayCommand]
-    public void AutoLaunch()
+    public void Launch()
     {
-
+        _configurationCenter[nameof(AutoLaunch)] = "true";
+        try
+        {
+            string json = File.ReadAllText("settings.json");
+            JsonNode root = JsonNode.Parse(json)!;
+            root![nameof(AutoLaunch)] = "true";
+            File.WriteAllText("settings.json", root.ToJsonString());
+        }
+        finally
+        {
+            RKUtils.Set(execFileName);
+        }
     }
     [RelayCommand]
     public void NotLaunch()
     {
-
+        _configurationCenter[nameof(AutoLaunch)] = "false";
+        try
+        {
+            string json = File.ReadAllText("settings.json");
+            JsonNode root = JsonNode.Parse(json)!;
+            root![nameof(AutoLaunch)] = "false";
+            File.WriteAllText("settings.json", root.ToJsonString());
+        }
+        finally
+        {
+            RKUtils.Delete(execFileName);
+        }
     }
 }

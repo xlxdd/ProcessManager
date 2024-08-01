@@ -33,11 +33,11 @@
                     HorizontalAlignment="Center">
             <TextBlock Text="{Binding [s_notlaunch],Source={x:Static r:LanguageManager.Instance}}"
                        VerticalAlignment="Center" />
-            <ToggleButton IsChecked="{Binding Launch}"
+            <ToggleButton IsChecked="{Binding AutoLaunch}"
                           Style="{StaticResource MaterialDesignSwitchToggleButton}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
-                        <i:InvokeCommandAction Command="{Binding AutoLaunchCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding LaunchCommand}"/>
                     </i:EventTrigger>
                     <i:EventTrigger EventName="Unchecked">
                         <i:InvokeCommandAction Command="{Binding NotLaunchCommand}"/>

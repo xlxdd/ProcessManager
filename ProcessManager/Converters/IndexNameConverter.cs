@@ -1,5 +1,4 @@
-﻿using Autofac;
-using ProcessManager.Resources;
+﻿using ProcessManager.Resources;
 using System.Globalization;
 using System.Windows.Data;
 
