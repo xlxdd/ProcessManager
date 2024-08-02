@@ -57,7 +57,7 @@ public partial class ProcessViewModel : ViewModelBase
     private async void Init()
     {
         Serilog.Log.Information("Reading ProcessInfo From opt.json");
-        string filePath = @"opt.json";
+        string filePath = App.Current.EXEDirectory+@"\\opt.json";
         var opts = JsonUtils.ReadfromJson<IEnumerable<ProcessStartingOptions?>>(filePath);
         foreach (var opt in opts)
         {
@@ -167,7 +167,7 @@ public partial class ProcessViewModel : ViewModelBase
         }
         else Serilog.Log.Information($"Canceled to add a Process");
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
-        string outputPath = @"opt.json";
+        string outputPath = App.Current.EXEDirectory+@"\\opt.json";
         JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
     }
     /// <summary>
@@ -331,7 +331,7 @@ public partial class ProcessViewModel : ViewModelBase
             processInfo.ProcessStartingOptions = res;
         }
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
-        string outputPath = @"opt.json";
+        string outputPath =App.Current.EXEDirectory+@"\\opt.json";
         JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
     }
     [RelayCommand]
@@ -345,7 +345,7 @@ public partial class ProcessViewModel : ViewModelBase
         processInfo.Process?.Kill();
         Processes.Remove(processInfo);
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
-        string outputPath = @"opt.json";
+        string outputPath = App.Current.EXEDirectory + @"\\opt.json";
         JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
     }
     [RelayCommand]

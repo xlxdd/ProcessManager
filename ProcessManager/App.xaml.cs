@@ -18,11 +18,30 @@ namespace ProcessManager
     {
         public Autofac.IContainer Container { get; }
         public static new App Current => (App)Application.Current;
+        public string? EXEDirectory { get; set; }
+        static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show($"CurrentDomain_UnhandledException：" + (e.ExceptionObject as Exception).Message);
+        }
+        static void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true; //使用e.Handled能防止程序崩溃
+            MessageBox.Show($"Current_DispatcherUnhandledException：" + e.Exception.Message);
+        }
+        private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            MessageBox.Show($"TaskScheduler_UnobservedTaskException：" + e.Exception.Message);
+        }
         public App()
         {
+            System.AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            //throw new Exception("Kaboom");
             #region Configuration
             var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("settings.json", false, true);
+            EXEDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly()!.Location);
+            configurationBuilder.SetBasePath(EXEDirectory!).AddJsonFile("settings.json", false, true);
             var configurationCenter = configurationBuilder.Build();
             #endregion
             #region Log

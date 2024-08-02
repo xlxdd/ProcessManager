@@ -66,7 +66,7 @@ public partial class MainViewModel : ViewModelBase
     public static void Exit()
     {
         Serilog.Log.Information("-----------Exit-----------");
-        Serilog.Log.CloseAndFlush();
+        //Serilog.Log.CloseAndFlush();
         App.Current.Shutdown();
     }
 }
