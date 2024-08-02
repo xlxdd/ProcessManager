@@ -11,7 +11,7 @@
              xmlns:r="clr-namespace:ProcessManager.Resources"
              mc:Ignorable="d"
              Height="Auto"
-             Width="680">
+             Width="700">
     <i:Interaction.Behaviors>
         <v:ValidationExceptionBehavior />
     </i:Interaction.Behaviors>
@@ -71,7 +71,7 @@
                 Margin="10 10">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding [process_number],Source={x:Static r:LanguageManager.Instance}}" />
-            <TextBox>
+            <TextBox IsEnabled="False">
                 <TextBox.Text>
                     <Binding Path="Options.Priority"
                              NotifyOnValidationError="True"
@@ -96,8 +96,18 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <TextBlock Text="英文名：" />
-            <TextBox Text="{Binding Options.Name.English}" />
+            <TextBlock Text="{Binding [process_name_en],Source={x:Static r:LanguageManager.Instance}}" />
+            <TextBox>
+                <TextBox.Text>
+                    <Binding Path="Options.Name.English"
+                             NotifyOnValidationError="True"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:NameValidator ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding [process_path], Source={x:Static r:LanguageManager.Instance}}" />

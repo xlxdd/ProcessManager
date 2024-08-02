@@ -105,7 +105,7 @@ public partial class ProcessViewModel : ViewModelBase
         }
         await Task.WhenAll(tasks);
     }
-
+    #region watchdog's work
     /// <summary>
     /// 刷新进程实时信息并且更新到UI
     /// </summary>
@@ -151,25 +151,7 @@ public partial class ProcessViewModel : ViewModelBase
             }
         }
     }
-    /// <summary>
-    /// 新增的需要手动启动
-    /// </summary>
-    [RelayCommand]
-    public void Add()
-    {
-        Serilog.Log.Information("Adding new Process...");
-        var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("t_add", new object());
-        if (res != null)
-        {
-            var name = StringUtils.FullNameToProcessName(res!.Path!);
-            Processes.Add(new ProcessInfo { ProcessName = name, ProcessStartingOptions = res, Running = false, Watcher = new ProcessUtils.GeneralProcessWatcher(name) });
-            Serilog.Log.Information($"Added a new Process,nane = {name}");
-        }
-        else Serilog.Log.Information($"Canceled to add a Process");
-        var newcfg = Processes.Select(p => p.ProcessStartingOptions);
-        string outputPath = App.Current.EXEDirectory+@"\\opt.json";
-        JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
-    }
+    #endregion
     /// <summary>
     /// 开启全部
     /// </summary>
@@ -321,32 +303,63 @@ public partial class ProcessViewModel : ViewModelBase
         ShowWindow(hWnd, SW_HIDE);
     }
     #endregion
+    /// <summary>
+    /// 新增的需要手动启动
+    /// </summary>
+    [RelayCommand]
+    public void Add()
+    {
+        Serilog.Log.Information("Adding new Process...");
+        var res = _dialogService.OpenDialog<AddDialogView, AddDialogViewModel, ProcessStartingOptions>("t_add", Processes.Count);
+        if (res != null)
+        {
+            var name = StringUtils.FullNameToProcessName(res!.Path!);
+            Processes.Add(new ProcessInfo { ProcessName = name, ProcessStartingOptions = res, Running = false, Watcher = new ProcessUtils.GeneralProcessWatcher(name) });
+            Serilog.Log.Information($"Added a new Process,nane = {name}");
+            var newcfg = Processes.Select(p => p.ProcessStartingOptions);
+            string outputPath = App.Current.EXEDirectory + @"\\opt.json";
+            JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
+        }
+        else Serilog.Log.Information($"Canceled to add a Process");
+    }
     [RelayCommand]
     public void Edit(ProcessInfo processInfo)
     {
+        Serilog.Log.Information($"Editing Process {processInfo.ProcessName}...");
         var res = _dialogService.OpenDialog<EditDialogView, EditDialogViewModel, ProcessStartingOptions>("t_edit", processInfo);
         if (res != null)
         {
             //传的都是引用，直接改
             processInfo.ProcessStartingOptions = res;
+            var newcfg = Processes.Select(p => p.ProcessStartingOptions);
+            string outputPath = App.Current.EXEDirectory + @"\\opt.json";
+            JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
+            Serilog.Log.Information($"Succeeded to edit Process {processInfo.ProcessName}");
         }
-        var newcfg = Processes.Select(p => p.ProcessStartingOptions);
-        string outputPath =App.Current.EXEDirectory+@"\\opt.json";
-        JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
+        else Serilog.Log.Information($"Canceled to edit Process {processInfo.ProcessName}");
     }
     [RelayCommand]
     public void Delete(ProcessInfo processInfo)
     {
+        Serilog.Log.Information($"Deleting Process {processInfo.ProcessName}...");
         var res = _dialogService.OpenDialog<DeleteConfirmDialogView, DeleteConfiremDialogViewModel, DialogResult?>("t_del", "m_del");
         //取消
-        if (null == res) return;
-        //1关闭进程（要关闭吗？我们只是不监视他了，要不要关闭归我管吗？）2移除监视器 3删除processInfo 4修改json
+        if (null == res)
+        {
+            Serilog.Log.Information($"Canceled to delete Process {processInfo.ProcessName}");
+            return;
+        };
+        //移除监视器
         processInfo.Watcher?.Dispose();
+        //杀死进程
         processInfo.Process?.Kill();
+        //移出列表
         Processes.Remove(processInfo);
+        //更新json
         var newcfg = Processes.Select(p => p.ProcessStartingOptions);
         string outputPath = App.Current.EXEDirectory + @"\\opt.json";
         JsonUtils.WriteToJson<IEnumerable<ProcessStartingOptions?>>(outputPath, newcfg);
+        Serilog.Log.Information($"Succeeded to delete Process {processInfo.ProcessName}");
     }
     [RelayCommand]
     public void ShowInfo(ProcessInfo processInfo)

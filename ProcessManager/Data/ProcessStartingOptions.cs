@@ -11,7 +11,7 @@ public partial class ProcessStartingOptions : ObservableObject
     /// 编号，在我的理解里是优先级？
     /// </summary>
     [ObservableProperty]
-    private ushort priority;
+    private ushort priority = 1;
     /// <summary>
     /// 名称
     /// </summary>

@@ -10,7 +10,9 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:chrome="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         mc:Ignorable="d"
-        Title="{Binding [window_title],Source={x:Static r:LanguageManager.Instance}}" Height="550" Width="1015"
+        WindowStartupLocation="CenterScreen"
+        Height="700"
+        Width="1000"
         Background="LightGray">
     <WindowChrome.WindowChrome>
         <chrome:WindowChrome 

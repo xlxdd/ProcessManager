@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProcessManager.Views.Dialogs"
              xmlns:vm="clr-namespace:ProcessManager.ViewModels.Dialogs"
+             xmlns:r="clr-namespace:ProcessManager.Resources"
              mc:Ignorable="d"
              Height="Auto"
-             Width="520">
+             Width="700">
     <UserControl.Resources>
         <DataTemplate x:Key="EnumTemplate">
             <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
@@ -15,7 +16,7 @@
         <Style TargetType="TextBlock"
                BasedOn="{StaticResource MaterialDesignTextBlock}">
             <Setter Property="Width"
-                    Value="80" />
+                    Value="150" />
         </Style>
         <Style TargetType="TextBox"
                BasedOn="{StaticResource MaterialDesignTextBox}">
@@ -52,68 +53,68 @@
     <StackPanel Orientation="Vertical"
                 Margin="10 10">
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="编号：" />
+            <TextBlock Text="{Binding [process_number],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.Priority}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="中文名：" />
+            <TextBlock Text="{Binding [process_name],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.Name.Chinese}" />
-            <TextBlock Text="英文名：" />
+            <TextBlock Text="{Binding [process_name_en],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.Name.English}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="启动路径：" />
-            <TextBox Width="350"
+            <TextBlock Text="{Binding [process_path], Source={x:Static r:LanguageManager.Instance}}" />
+            <TextBox Width="420"
                      Margin="0"
                      Text="{Binding Options.Path}" />
-            <Button Content="查看"
+            <Button Content="{Binding [b_browser], Source={x:Static r:LanguageManager.Instance}}"
                     Margin="0"
                     Command="{Binding GetPathCommand}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="启动参数：" />
-            <TextBox Width="350"
+            <TextBlock Text="{Binding [process_parameter],Source={x:Static r:LanguageManager.Instance}}"/>
+            <TextBox Width="420"
                      Margin="0"
                      Text="{Binding Options.Parameters}" />
             <CheckBox x:Name="EnableParameter"
-                      Content="启用"
+                      Content="{Binding [process_enable],Source={x:Static r:LanguageManager.Instance}}"
                       IsChecked="{Binding Options.EnableParamaters}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="延迟时间：" />
+            <TextBlock Text="{Binding [process_delayTime],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.DelayTime}" />
-            <TextBlock Text="超时时间：" />
+            <TextBlock Text="{Binding [process_overTimeTime],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.OvertimeTime}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="CPU占用重启：" />
+            <TextBlock Text="{Binding [process_maxCPU],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Margin="0"
                      Text="{Binding Options.MaxCPUUsage}" />
             <CheckBox x:Name="EnableCPU"
-                      Content="启用"
+                      Content="{Binding [process_enable],Source={x:Static r:LanguageManager.Instance}}"
                       IsChecked="{Binding Options.EnableMaxCPUUsage}" />
-            <TextBlock Text="内存占用重启：" />
+            <TextBlock Text="{Binding [process_maxRAM],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Margin="0"
                      Text="{Binding Options.MaxRAMUsage}" />
             <CheckBox x:Name="EnableRAM"
-                      Content="启用"
+                      Content="{Binding [process_enable],Source={x:Static r:LanguageManager.Instance}}"
                       IsChecked="{Binding Options.EnableMaxRAMUsage}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="窗口数：" />
+            <TextBlock Text="{Binding [process_windowCount],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.WindowCount}" />
-            <TextBlock Text="进程数：" />
+            <TextBlock Text="{Binding [process_processCount],Source={x:Static r:LanguageManager.Instance}}" />
             <TextBox Text="{Binding Options.ProcessCount}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="显示方式：" />
-            <TextBox Text="{Binding ShowingOption}" />
-            <TextBlock Text="启动方式：" />
-            <TextBox Text="{Binding StartingOption}" />
+            <TextBlock Text="{Binding [process_showMode],Source={x:Static r:LanguageManager.Instance}}" />
+            <TextBox Text="{Binding ShowingOption,Converter={StaticResource idx}}" />
+            <TextBlock Text="{Binding [process_startMode],Source={x:Static r:LanguageManager.Instance}}" />
+            <TextBox Text="{Binding StartingOption,Converter={StaticResource idx}}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="关闭方式：" />
-            <TextBox Text="{Binding ClosingOption}" />
+            <TextBlock Text="{Binding [process_closeMode],Source={x:Static r:LanguageManager.Instance}}" />
+            <TextBox Text="{Binding ClosingOption,Converter={StaticResource idx}}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

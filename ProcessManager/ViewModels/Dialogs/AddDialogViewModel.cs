@@ -4,6 +4,7 @@ using ProcessManager.Data;
 using ProcessManager.Data.Enums;
 using ProcessManager.Services_Interfaces;
 using ProcessManager.Utils;
+using System.IO;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace ProcessManager.ViewModels.Dialogs;
@@ -26,6 +27,11 @@ public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStart
         ShowingOptions = EnumUtils.EnumToList<ShowingOptions>();
         ClosingOptions = EnumUtils.EnumToList<ClosingOptions>();
     }
+    public override void GetParam(object? p)
+    {
+        var num = (int)p!;
+        Options!.Priority = (ushort)((ushort)num + 1);
+    }
     [RelayCommand]
     public void GetPath()
     {
@@ -34,6 +40,8 @@ public partial class AddDialogViewModel : DialogBase, IDialogResult<ProcessStart
         if (openFileDialog.ShowDialog() == true)
         {
             Options!.Path = openFileDialog.FileName;
+            Options!.Name!.Chinese = StringUtils.FullNameToProcessName(openFileDialog.FileName);
+            Options!.Name!.English = StringUtils.FullNameToProcessName(openFileDialog.FileName);
         }
     }
     public ProcessStartingOptions GetResult()

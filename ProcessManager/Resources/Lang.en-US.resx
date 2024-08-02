@@ -333,4 +333,7 @@
   <data name="s_notlaunch" xml:space="preserve">
     <value>NotLaunch</value>
   </data>
+  <data name="process_name_en" xml:space="preserve">
+    <value>English Name:</value>
+  </data>
 </root>

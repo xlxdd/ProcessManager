@@ -19,7 +19,7 @@ namespace ProcessManager
         public Autofac.IContainer Container { get; }
         public static new App Current => (App)Application.Current;
         public string? EXEDirectory { get; set; }
-        private static System.Threading.Mutex mutex=new(true, "PM");
+        private static readonly System.Threading.Mutex mutex=new(true, "PM");
         #region Exception Handler
         static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {

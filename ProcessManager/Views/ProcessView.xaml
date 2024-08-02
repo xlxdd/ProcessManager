@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ProcessManager.Views"
+             xmlns:md ="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:ProcessManager.ViewModels"
              xmlns:cvt ="clr-namespace:ProcessManager.Converters"
              xmlns:r="clr-namespace:ProcessManager.Resources"
@@ -12,7 +13,13 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
-        <cvt:BoolReverseConverter x:Key="cvt"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <cvt:BoolReverseConverter x:Key="cvt" />
+        </ResourceDictionary>
+        
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -29,16 +36,21 @@
                        CanUserDeleteRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{Binding [p_priority],Source={x:Static r:LanguageManager.Instance}}"
+                                        Width="80"
                                         Binding="{Binding ProcessStartingOptions.Priority}" />
                     <DataGridTextColumn Header="{Binding [p_name],Source={x:Static r:LanguageManager.Instance}}"
+                                        Width="150"
                                         Binding="{Binding ProcessStartingOptions.Name.Chinese}" />
                     <DataGridTextColumn Header="{Binding [p_CPU],Source={x:Static r:LanguageManager.Instance}}"
+                                        Width="150"
                                         Binding="{Binding ProcessRealtimeInfo.CPUUsage}" />
                     <DataGridTextColumn Header="{Binding [p_RAM],Source={x:Static r:LanguageManager.Instance}}"
+                                        Width="150"
                                         Binding="{Binding ProcessRealtimeInfo.RAMUsage}" />
                     <DataGridTextColumn Header="{Binding [p_status],Source={x:Static r:LanguageManager.Instance}}"
+                                        Width="150"
                                         Binding="{Binding ProcessRealtimeInfo.ProcessStatus}" />
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="300">
                         <DataGridTemplateColumn.Header>
                             <TextBlock Text="{Binding [p_operation],Source={x:Static r:LanguageManager.Instance}}"
                                        HorizontalAlignment="Center" />
@@ -47,30 +59,41 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Content="{Binding [o_start],Source={x:Static r:LanguageManager.Instance}}"
+                                            Width="100"
                                             IsEnabled="{Binding Running,Converter={StaticResource cvt}}"
                                             Command="{Binding DataContext.StartCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                     <Button Content="{Binding [o_close],Source={x:Static r:LanguageManager.Instance}}"
+                                            Width="100"
                                             IsEnabled="{Binding Running}"
                                             Command="{Binding DataContext.StopCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Content="{Binding [o_show],Source={x:Static r:LanguageManager.Instance}}"
-                                            IsEnabled="{Binding Running}"
-                                            Command="{Binding DataContext.ShowCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}" />
-                                    <Button Content="{Binding [o_hide],Source={x:Static r:LanguageManager.Instance}}"
-                                            IsEnabled="{Binding Running}"
-                                            Command="{Binding DataContext.HideCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}" />
-                                    <Button Content="{Binding [o_edit],Source={x:Static r:LanguageManager.Instance}}"
-                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}" />
-                                    <Button Content="{Binding [o_del],Source={x:Static r:LanguageManager.Instance}}"
-                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}" />
-                                    <Button Content="{Binding [o_detail],Source={x:Static r:LanguageManager.Instance}}"
-                                            Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}" />
+                                    <md:PopupBox PlacementMode="RightAndAlignTopEdges">
+                                        <StackPanel Orientation="Vertical">
+                                            <Button Content="{Binding [o_show],Source={x:Static r:LanguageManager.Instance}}"
+                                                    Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                    IsEnabled="{Binding Running}"
+                                                    Command="{Binding DataContext.ShowCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Content="{Binding [o_hide],Source={x:Static r:LanguageManager.Instance}}"
+                                                    Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                    IsEnabled="{Binding Running}"
+                                                    Command="{Binding DataContext.HideCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Content="{Binding [o_edit],Source={x:Static r:LanguageManager.Instance}}"
+                                                    Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Content="{Binding [o_del],Source={x:Static r:LanguageManager.Instance}}"
+                                                    Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Content="{Binding [o_detail],Source={x:Static r:LanguageManager.Instance}}"
+                                                    Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                    Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </md:PopupBox>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

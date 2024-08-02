@@ -270,7 +270,7 @@
     <value>操作</value>
   </data>
   <data name="p_priority" xml:space="preserve">
-    <value>优先级</value>
+    <value>编号</value>
   </data>
   <data name="p_RAM" xml:space="preserve">
     <value>内存占用</value>
@@ -340,5 +340,8 @@
   </data>
   <data name="s_notlaunch" xml:space="preserve">
     <value>开机不自启</value>
+  </data>
+  <data name="process_name_en" xml:space="preserve">
+    <value>英文名：</value>
   </data>
 </root>
