@@ -19,6 +19,8 @@ namespace ProcessManager
         public Autofac.IContainer Container { get; }
         public static new App Current => (App)Application.Current;
         public string? EXEDirectory { get; set; }
+        private static System.Threading.Mutex mutex=new(true, "PM");
+        #region Exception Handler
         static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             MessageBox.Show($"CurrentDomain_UnhandledException：" + (e.ExceptionObject as Exception).Message);
@@ -32,12 +34,14 @@ namespace ProcessManager
         {
             MessageBox.Show($"TaskScheduler_UnobservedTaskException：" + e.Exception.Message);
         }
+        #endregion
         public App()
         {
+            #region Exception Handle
             System.AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-            //throw new Exception("Kaboom");
+            #endregion
             #region Configuration
             var configurationBuilder = new ConfigurationBuilder();
             EXEDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly()!.Location);
@@ -65,6 +69,11 @@ namespace ProcessManager
         }
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (!mutex.WaitOne(0, false))
+            {
+                MessageBox.Show("程序已经在运行！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                Shutdown();
+            }
             Serilog.Log.Information("App starting");
             base.OnStartup(e);
             Serilog.Log.Information("Requie MainWindow");
